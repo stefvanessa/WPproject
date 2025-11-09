@@ -1,0 +1,39 @@
+services:
+  server:
+    image: node:18
+    working_dir: /src
+    volumes:
+      - ./server:/src
+    command: sh -c "npm install && npm run build && npm run start"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/my-db
+      - NODE_ENV=development
+
+  mongodb: 
+    image: mongo:6.0
+    container_name: mongodb_licenta
+    ports: 
+      - "37017:27017"
+    volumes: 
+      - mongodb_data:/data/db
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+volumes:
+  mongodb_data:
+  minio_data:
