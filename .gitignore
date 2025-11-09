@@ -1,0 +1,45 @@
+# Node dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code settings
+.vscode/
+.history/
+
+# Coverage directory (for testing)
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Optional: if using Next.js, Angular, or React
+.next/
+.angular/
+.cache/
