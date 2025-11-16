@@ -15,7 +15,7 @@ services:
 
   mongodb: 
     image: mongo:6.0
-    container_name: mongodb_licenta
+    container_name: mongodb_web_project
     ports: 
       - "37017:27017"
     volumes: 
