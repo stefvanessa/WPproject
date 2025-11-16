@@ -1,0 +1,56 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background-color: transparent;
+  color: #fff;
+  z-index: 1000;
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+
+  &.scrolled {
+    background-color: #d6c0a499; // semi-transparent dark
+    backdrop-filter: blur(8px); // glass effect
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 24px;
+
+    .tab {
+      position: relative;
+      background: none;
+      border: none;
+      color: #000000;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #ff93dd;
+      }
+
+      &.active {
+        color: #ff00a2;
+      }
+
+      &.active::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #ff00a2;
+        transition: width 0.3s ease;
+      }
+    }
+  }
+}

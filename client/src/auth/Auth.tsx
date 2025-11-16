@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import bg from "../assets/login-background.png";
-import "./Auth.css";
+import "./Auth.scss";
 
 function Auth() {
   return (
