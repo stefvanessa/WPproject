@@ -1,50 +1,135 @@
 .clothing-card {
-  width: 400px;
-  height: 260px;
+  width: clamp(260px, 28vw, 550px); // grows beyond 400px
+  height: clamp(180px, 21vw, 380px); // grows proportionally
   background: #eae8e7;
-  border-radius: 8px;
+  border-radius: 10px;
+
   position: relative;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: height 0.2s ease;
+
+  overflow: hidden;
+
+  /* Smooth scale on layout changes */
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
-/* --- TALL VARIANT (double height) --- */
+/* Tall version for dresses */
 .clothing-card.tall {
-  height: 560px; // double
-  transition: height 0.2s ease;
+  height: clamp(360px, 45vw, 800px); // dress scales up too
 }
 
-/* Clothing Image */
+/* Clothing image */
 .clothing-image {
+  width: clamp(40%, 55%, 70%);
+  height: auto;
   max-height: 85%;
-  max-width: 65%;
   object-fit: contain;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  font-size: 36px; // Responsive arrows
+  border-radius: 30px;
+  cursor: pointer;
+  color: #4a4a4a;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* Arrows */
 .arrow {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 50px;
+  font-size: 30px; // Responsive arrows
+  height: 30px;
+  width: 30px;
+  margin: 3px;
+
   cursor: pointer;
   color: #4a4a4a;
-  padding: 0 10px;
+}
 
-  &.left {
-    left: 20px;
+.left {
+  left: 15px;
+}
+
+.right {
+  right: 15px;
+}
+
+.icon:hover {
+  background: #f3f3f3;
+}
+
+.action-buttons {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.2s ease;
+
+  svg {
+    font-size: 20px;
+    color: white;
   }
 
-  &.right {
-    right: 20px;
+  &:hover {
+    opacity: 0.9;
+  }
+
+  /* tooltip */
+  .tooltip {
+    position: absolute;
+    bottom: -38px;
+    padding: 6px 10px;
+    background: #3333339f;
+    color: white;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(3px);
+    pointer-events: none;
+    transition: all 0.15s ease;
+  }
+
+  &:hover .tooltip {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Add item placeholder */
+/* COLORS */
+.action-btn.shuffle {
+  background: #3a7afe; // blue
+}
+
+.action-btn.remove {
+  background: #e04545; // red
+}
+
+/* ----- ADD BUTTON ----- */
 .add-btn {
   background: white;
   border: none;
@@ -53,6 +138,6 @@
   font-size: 16px;
   cursor: pointer;
   color: #3d3d3d;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   font-weight: 500;
 }

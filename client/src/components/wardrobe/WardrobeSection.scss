@@ -1,0 +1,29 @@
+.wardrobe-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    h3 {
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    span {
+      font-size: 14px;
+      color: #888;
+    }
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 26px;
+  }
+}

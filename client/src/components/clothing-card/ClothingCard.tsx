@@ -1,13 +1,15 @@
 import "./ClothingCard.scss";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiChevronLeft, FiChevronRight, FiRefreshCw, FiTrash2 } from "react-icons/fi";
 
 type ClothingCardProps = {
   image?: string;
   label: string;
-  tall?: boolean;       // NEW: for long items (dresses)
+  tall?: boolean;
   onPrev?: () => void;
   onNext?: () => void;
   onAdd?: () => void;
+  onShuffle?: () => void;
+  onRemove?: () => void;
 };
 
 export default function ClothingCard({
@@ -17,22 +19,40 @@ export default function ClothingCard({
   onPrev,
   onNext,
   onAdd,
+  onShuffle,
+  onRemove
 }: ClothingCardProps) {
   return (
     <div className={`clothing-card ${tall ? "tall" : ""}`}>
-
       {image ? (
         <>
-          <FiChevronLeft className="arrow left" onClick={onPrev} />
+          <div className="icon left">
+            <FiChevronLeft className="arrow" onClick={onPrev} />
+          </div>
           <img src={image} alt={label} className="clothing-image" />
-          <FiChevronRight className="arrow right" onClick={onNext} />
+          <div className="icon right">
+            <FiChevronRight className="arrow" onClick={onNext} />
+          </div>
+
+          <div className="action-buttons">
+            {onShuffle && <div className="action-btn shuffle" onClick={onShuffle}>
+              <FiRefreshCw />
+              <span className="tooltip">Shuffle</span>
+            </div>}
+
+            {onRemove && <div className="action-btn remove" onClick={onRemove}>
+              <FiTrash2 />
+              <span className="tooltip">Remove</span>
+            </div>
+            }
+
+          </div>
         </>
       ) : (
         <button className="add-btn" onClick={onAdd}>
           + ADD {label}
         </button>
       )}
-
     </div>
   );
 }

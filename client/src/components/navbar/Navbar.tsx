@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.scss";
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   activeTab: "generate" | "wardrobe" | "collections";
@@ -7,6 +8,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,22 +20,23 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
 
   return (
     <div className={`navbar ${scrolled ? "scrolled" : ""}`}>
+      <div className="brand__name">SnapFit</div>
       <div className="tabs">
         <div
           className={`tab ${activeTab === "generate" ? "active" : ""}`}
-          onClick={() => console.log("generate")}
+          onClick={() => navigate("/generate")}
         >
           Generate outfit
         </div>
         <div
           className={`tab ${activeTab === "wardrobe" ? "active" : ""}`}
-          onClick={() => console.log("wardrobe")}
+          onClick={() => navigate("/wardrobe")}
         >
           My wardrobe
         </div>
         <div
           className={`tab ${activeTab === "collections" ? "active" : ""}`}
-          onClick={() => console.log("collections")}
+          onClick={() => navigate("/collections")}
         >
           Collections
         </div>
