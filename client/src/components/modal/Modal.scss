@@ -18,8 +18,9 @@
 
 .modal-body {
   background: #ffffff;
-  width: 420px;
-  padding: 28px;
+  width: min(640px, 92vw);
+  max-height: 90vh;
+  padding: clamp(18px, 3vw, 28px);
   border-radius: 16px;
 
   box-shadow: 0 5px 20px rgba(0,0,0,0.2);
@@ -28,6 +29,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+  overflow: hidden;
 }
 
 @keyframes popIn {
@@ -45,4 +47,18 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+@media (max-width: 600px) {
+  .modal-overlay {
+    align-items: flex-end;
+  }
+
+  .modal-body {
+    width: 100vw;
+    max-height: 86vh;
+    border-radius: 18px 18px 0 0;
+  }
 }

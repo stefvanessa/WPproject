@@ -9,11 +9,19 @@ import session from "express-session";
 import passport from "./config/passport";
 import authRoutes from "./routes/authRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
-
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 const MONGO_URI = process.env.MONGO_URI ?? "mongodb://localhost:27017/mydb";
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",  // frontend
+    credentials: true,                // allow cookies
+    methods: "GET,POST,PUT,DELETE"
+  })
+);
 
 app.use(
   session({

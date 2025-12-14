@@ -3,6 +3,7 @@
   display: flex;
   gap: 20px;
   align-items: center;
+  flex-wrap: wrap;
 
   background: #ffffff;
   padding: 18px 24px;
@@ -43,6 +44,47 @@
     transform: translateY(-50%);
     font-size: 18px;
     color: #7a7a7a;
+  }
+}
+
+@media (max-width: 900px) {
+  .search-filter-bar {
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .filter-dropdown {
+    width: calc(50% - 6px);
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 600px) {
+  .search-filter-bar {
+    position: static;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  }
+
+  .filter-dropdown {
+    width: 100%;
+  }
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #3d3d3d;
+  color: #fff;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85;
   }
 }
 

@@ -6,9 +6,8 @@
 
 .wardrobe-container {
   max-width: 1300px;
-  margin-top: 50px;
-  margin: 0 auto;
-  padding: 40px 40px;
+  margin: 60px auto 0;
+  padding: 32px 32px;
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -26,5 +25,44 @@
 
   &:hover {
     opacity: 0.85;
+  }
+}
+
+.error-text {
+  color: #b3261e;
+  font-size: 14px;
+}
+
+.empty-state {
+  font-size: 15px;
+  color: #555;
+}
+
+@media (max-width: 900px) {
+  .wardrobe-container {
+    padding: 24px 20px;
+    margin-top: 50px;
+    gap: 28px;
+  }
+
+  .add-item-btn {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .wardrobe-page {
+    padding: 20px 0;
+  }
+
+  .wardrobe-container {
+    padding: 16px 14px;
+    margin-top: 40px;
+    gap: 22px;
+  }
+
+  .add-item-btn {
+    width: 100%;
+    text-align: center;
   }
 }

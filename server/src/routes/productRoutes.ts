@@ -4,7 +4,8 @@ import {
   getProducts,
   updateProduct,
   deleteProduct,
-  getProductById
+  getProductById,
+  getProductMeta
 } from "../controllers/productController";
 import { isAuthenticated } from "../middleware/auth";
 import { upload } from "../middleware/upload"; // ✅ use your custom upload (memoryStorage)
@@ -16,6 +17,9 @@ router.post("/", isAuthenticated, upload.single("image"), createProduct);
 
 // Read all + filtering
 router.get("/", isAuthenticated, getProducts);
+
+// Metadata for client forms
+router.get("/meta/options", isAuthenticated, getProductMeta);
 
 // Read single product
 router.get("/:id", isAuthenticated, getProductById);

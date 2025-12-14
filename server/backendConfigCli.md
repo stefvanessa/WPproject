@@ -42,6 +42,34 @@ For minIO:
     npm install -D @types/uuid
 
 
+
+Conecting backend to frontend 
+1. installing cors 
+    npm install cors
+    npm install --save-dev @types/cors
+
     
 
+
+
+
+How to run the project
+1. start the minio server throgh docker
+1.1 Open Docker Descktop
+1.2 in the project path run:
+    C:\Users\stefv\OneDrive\Desktop\WPproject>   docker-compose up -d minio
+1.3 login wia minio at
+    http://localhost:9000
+
+with thise credentials
+         Username: minioadmin
+        Password: minioadmin
+2. star node/server side
+in the project path 
+    cd server
+    npm run dev
+3. star client side
+in the project path 
+    cd client
+    npm run dev
 

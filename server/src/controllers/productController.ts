@@ -3,46 +3,115 @@ import { Product } from "../models/Product";
 import { s3 } from "../config/minIO";
 import {
   GetObjectCommand,
-  DeleteObjectCommand
+  DeleteObjectCommand,
+  PutObjectCommand,
+  HeadBucketCommand,
+  CreateBucketCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import {
+  clothingCategories,
+  clothingPatterns,
+  clothingWeather,
+  clothingColors,
+  clothingStyles,
+  clothingFits,
+} from "../data/clothingData";
 
-// CREATE PRODUCT
-// CREATE PRODUCT
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuid } from "uuid";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    if (!process.env.MINIO_BUCKET) {
+      return res.status(500).json({ message: "Storage bucket not configured" });
+    }
+
     // Check if image was uploaded
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });
     }
 
+    const body = req.body as Record<string, any>;
+
+    const normalizeArray = (value: unknown): string[] => {
+      if (Array.isArray(value)) return value as string[];
+      if (value === undefined || value === null) return [];
+      return [String(value)];
+    };
+
+    const style = normalizeArray(body.style);
+    const temperature = normalizeArray(body.temperature);
+
+    const requiredFields = ["name", "category", "type", "color", "pattern", "fit"];
+    const missing = requiredFields.filter((field) => !body[field]);
+    if (missing.length > 0 || style.length === 0 || temperature.length === 0) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
     // 1. Generate unique filename
     const fileName = `${uuid()}-${req.file.originalname}`;
 
+    // Ensure bucket exists (for local MinIO)
+    try {
+      await s3.send(new HeadBucketCommand({ Bucket: process.env.MINIO_BUCKET }));
+    } catch (headErr) {
+      try {
+        await s3.send(new CreateBucketCommand({ Bucket: process.env.MINIO_BUCKET }));
+      } catch (createErr) {
+        console.error("Failed to create bucket:", createErr);
+        return res.status(500).json({
+          message: "Error creating product",
+          detail: "Unable to create storage bucket",
+        });
+      }
+    }
+
     // 2. Upload file to MinIO
-    await s3.send(
-      new PutObjectCommand({
-        Bucket: process.env.MINIO_BUCKET,
-        Key: fileName,
-        Body: req.file.buffer,
-        ContentType: req.file.mimetype,
-      })
-    );
+    try {
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: process.env.MINIO_BUCKET,
+          Key: fileName,
+          Body: req.file.buffer,
+          ContentType: req.file.mimetype,
+        })
+      );
+    } catch (uploadErr) {
+      console.error("Failed to upload to storage:", uploadErr);
+      return res.status(500).json({
+        message: "Error creating product",
+        detail: "Unable to upload image to storage",
+      });
+    }
 
     // 3. Create product entry in MongoDB
     const product = await Product.create({
-      ...req.body,
+      ...body,
+      style,
+      temperature,
       imageKey: fileName,
-      user: (req.user as any)._id
+      user: (req.user as any)._id,
     });
 
-    res.status(201).json(product);
+    // Build signed URL for immediate display
+    const cmd = new GetObjectCommand({
+      Bucket: process.env.MINIO_BUCKET,
+      Key: product.imageKey,
+    });
+    const imageUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+
+    res.status(201).json({
+      ...product.toObject(),
+      imageUrl,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error creating product" });
+    console.error("Error creating product:", err);
+    const detail = err instanceof Error ? err.message : undefined;
+    res.status(500).json({ message: "Error creating product", detail });
   }
 };
 
@@ -129,7 +198,16 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     await product.save();
 
-    res.json(product);
+    const cmd = new GetObjectCommand({
+      Bucket: process.env.MINIO_BUCKET,
+      Key: product.imageKey
+    });
+    const signedUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+
+    res.json({
+      ...product.toObject(),
+      imageUrl: signedUrl
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error updating product" });
@@ -163,4 +241,16 @@ export const deleteProduct = async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ message: "Error deleting product" });
   }
+};
+
+// PRODUCT METADATA (options for client forms)
+export const getProductMeta = (_req: Request, res: Response) => {
+  res.json({
+    clothingCategories,
+    clothingPatterns,
+    clothingWeather,
+    clothingColors,
+    clothingStyles,
+    clothingFits,
+  });
 };

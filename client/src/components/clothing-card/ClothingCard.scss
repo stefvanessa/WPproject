@@ -1,5 +1,5 @@
 .clothing-card {
-  width: clamp(260px, 28vw, 550px); // grows beyond 400px
+  width: clamp(240px, 28vw, 550px); // grows beyond 400px
   height: clamp(180px, 21vw, 380px); // grows proportionally
   background: #eae8e7;
   border-radius: 10px;
@@ -140,4 +140,15 @@
   color: #3d3d3d;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .clothing-card {
+    width: 100%;
+    height: 260px;
+  }
+
+  .clothing-card.tall {
+    height: 360px;
+  }
 }

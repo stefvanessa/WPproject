@@ -1,0 +1,96 @@
+/* Full page center layout */
+.login-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(170deg, #ffffff, #ffffff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter", sans-serif;
+}
+
+/* Card holding logo + button */
+.login-card {
+  width: min(420px, 90vw);
+  padding: clamp(26px, 5vw, 40px);
+  border-radius: 20px;
+  background: hsl(45, 27%, 91%);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.04);
+
+  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.app-title {
+  font-size: 38px;
+  font-weight: 700;
+  color: #1c1c1e;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 17px;
+  color: #6e6e73;
+  margin-bottom: 30px;
+}
+
+/* BEAUTIFUL GOOGLE BUTTON */
+.google-btn {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #e0e0e0;
+  padding: 12px;
+  border-radius: 10px;
+
+  font-size: 17px;
+  font-weight: 500;
+  color: #3c4043;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.google-btn:hover {
+  background: #f7f7f7;
+  border-color: #cfcfcf;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.google-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.google-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .login-wrapper {
+    padding: 24px 12px;
+  }
+
+  .app-title {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+}

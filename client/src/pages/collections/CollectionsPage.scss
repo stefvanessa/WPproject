@@ -1,0 +1,53 @@
+@import "../my-wardrobe/MyWardrobePage.scss";
+
+.collections-page {
+   background: #f7f6f4;       // soft beige, like your reference
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+.collections-container {
+  max-width: 1300px;
+  margin: 60px auto 0;
+  padding: 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  h2 {
+    font-size: 24px;
+    color: #333;
+  }
+
+
+}
+
+.error-text {
+  color: #b3261e;
+  font-size: 14px;
+}
+
+.empty-state {
+  font-size: 15px;
+  color: #555;
+}
+
+@media (max-width: 900px) {
+  .collections-container {
+    padding: 24px 20px;
+    margin-top: 50px;
+  }
+}
+
+@media (max-width: 640px) {
+  .collections-container {
+    padding: 16px 14px;
+    margin-top: 40px;
+  }
+}

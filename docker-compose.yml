@@ -9,9 +9,14 @@ services:
       - "3000:3000"
     depends_on:
       - mongodb
+      - minio
     environment:
       - MONGO_URI=mongodb://mongo:27017/my-db
       - NODE_ENV=development
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_BUCKET=clothes
 
   mongodb: 
     image: mongo:6.0

@@ -1,55 +1,51 @@
 import "./SearchFilterBar.scss";
-import { FiSearch, FiChevronDown } from "react-icons/fi";
+import { FiSearch, FiFilter } from "react-icons/fi";
 import { useState } from "react";
+import FilterModal, { type AdvancedFilters } from "./FilterModal";
 
-const SearchFilterBar = () => {
-  const [colorOpen, setColorOpen] = useState(false);
-  const [seasonOpen, setSeasonOpen] = useState(false);
+export interface WardrobeFilters {
+  query: string;
+}
+
+interface Props {
+  filters: WardrobeFilters;
+  onChange: (next: WardrobeFilters) => void;
+  meta?: any;
+  onAdvancedChange?: (next: AdvancedFilters) => void;
+  advancedFilters?: AdvancedFilters;
+}
+
+const SearchFilterBar = ({ filters, onChange, meta, onAdvancedChange, advancedFilters }: Props) => {
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   return (
     <div className="search-filter-bar">
-
       {/* SEARCH FIELD */}
       <div className="search-wrapper">
         <FiSearch className="search-icon" />
-        <input type="text" placeholder="Search your closet..." />
+        <input
+          type="text"
+          placeholder="Search your closet..."
+          value={filters.query}
+          onChange={(e) => onChange({ ...filters, query: e.target.value })}
+        />
       </div>
 
-      {/* COLOR DROPDOWN */}
-      <div
-        className="filter-dropdown"
-        onClick={() => setColorOpen(!colorOpen)}
-      >
-        <span>Color</span>
-        <FiChevronDown className={`chevron ${colorOpen ? "open" : ""}`} />
-
-        {colorOpen && (
-          <div className="dropdown-menu">
-            <div className="dropdown-item">Black</div>
-            <div className="dropdown-item">White</div>
-            <div className="dropdown-item">Beige</div>
-            <div className="dropdown-item">Brown</div>
-          </div>
-        )}
-      </div>
-
-      {/* SEASON DROPDOWN */}
-      <div
-        className="filter-dropdown"
-        onClick={() => setSeasonOpen(!seasonOpen)}
-      >
-        <span>Season</span>
-        <FiChevronDown className={`chevron ${seasonOpen ? "open" : ""}`} />
-
-        {seasonOpen && (
-          <div className="dropdown-menu">
-            <div className="dropdown-item">Summer</div>
-            <div className="dropdown-item">Winter</div>
-            <div className="dropdown-item">Spring</div>
-            <div className="dropdown-item">Fall</div>
-          </div>
-        )}
-      </div>
+      {/* ADVANCED FILTER BUTTON */}
+      {meta && onAdvancedChange && advancedFilters !== undefined && (
+        <>
+          <button className="filter-btn" onClick={() => setFilterModalOpen(true)}>
+            <FiFilter /> Filters
+          </button>
+          <FilterModal
+            open={filterModalOpen}
+            onClose={() => setFilterModalOpen(false)}
+            meta={meta}
+            initial={advancedFilters}
+            onApply={(next) => onAdvancedChange(next)}
+          />
+        </>
+      )}
     </div>
   );
 };
