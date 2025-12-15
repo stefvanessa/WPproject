@@ -22,6 +22,7 @@ export default function GenerateOutfitPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [snackbar, setSnackbar] = useState<string | null>(null);
 
   const [top, setTop] = useState<Product | null>(null);
   const [bottom, setBottom] = useState<Product | null>(null);
@@ -109,6 +110,43 @@ export default function GenerateOutfitPage() {
     setShoes(nextItem(footwear, shoes?._id));
   };
 
+  const saveCurrentOutfit = async () => {
+    try {
+      const payload: any = { name: '' };
+
+      // Use UI mode to decide: if twoPiece UI is active, save top+bottom; if not, save dress
+      if (twoPiece) {
+        // Require both top and bottom
+        if (!(top && bottom)) {
+          setSnackbar('Select both top and bottom before saving');
+          setTimeout(() => setSnackbar(null), 2500);
+          return;
+        }
+        payload.top = top!._id;
+        payload.bottom = bottom!._id;
+      } else {
+        // Require a dress when in single-piece mode
+        if (!dress) {
+          setSnackbar('Select a dress before saving');
+          setTimeout(() => setSnackbar(null), 2500);
+          return;
+        }
+        payload.dress = dress._id;
+      }
+
+      if (outerwear) payload.outerwear = outerwear._id;
+      if (shoes) payload.shoes = shoes._id;
+
+      const { saveOutfit } = await import('../../api/outfits');
+      await saveOutfit(payload);
+      setSnackbar('Outfit saved');
+      setTimeout(() => setSnackbar(null), 2500);
+    } catch (err: any) {
+      setSnackbar('Failed saving outfit');
+      setTimeout(() => setSnackbar(null), 2500);
+    }
+  };
+
   return (
     <div className="home-page">
       <Navbar activeTab="generate" />
@@ -189,6 +227,15 @@ export default function GenerateOutfitPage() {
             onShuffle={shuffleShoes}
           />
         </div>
+
+        <div style={{ position: 'fixed', right: 20, top: 80, zIndex: 200 }}>
+          <button onClick={saveCurrentOutfit}>Save outfit</button>
+        </div>
+        {snackbar && (
+          <div style={{ position: 'fixed', right: 20, bottom: 40, background: '#222', color: '#fff', padding: '10px 14px', borderRadius: 6 }}>
+            {snackbar}
+          </div>
+        )}
       </div>
     </div>
   );

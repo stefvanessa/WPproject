@@ -1,5 +1,3 @@
-@import "../my-wardrobe/MyWardrobePage.scss";
-
 .collections-page {
    background: #f7f6f4;       // soft beige, like your reference
   min-height: 100vh;
@@ -36,6 +34,12 @@
 .empty-state {
   font-size: 15px;
   color: #555;
+}
+
+.outfits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(560px, 1fr));
+  gap: 24px;
 }
 
 @media (max-width: 900px) {

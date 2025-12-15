@@ -8,6 +8,7 @@ import productRoutes from "./routes/productRoutes";
 import session from "express-session";
 import passport from "./config/passport";
 import authRoutes from "./routes/authRoutes";
+import outfitRoutes from "./routes/outfitRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
 import cors from "cors";
 
@@ -49,6 +50,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/api/upload", uploadRoutes); 
 app.use("/api/products", productRoutes);
+app.use("/api/outfits", outfitRoutes);
 
 
 app.get("/health", (_req, res) => res.json({ ok: true }));

@@ -46,7 +46,8 @@ export async function updateProduct(
 ): Promise<Product> {
   return apiFetch<Product>(`/api/products/${id}`, {
     method: "PUT",
-    body: data,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
   });
 }
 
