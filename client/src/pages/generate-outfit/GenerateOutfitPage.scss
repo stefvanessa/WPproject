@@ -47,7 +47,6 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
-  flex: 1;
 }
 
 /* FIXED RIGHT COLUMN */
@@ -55,7 +54,6 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
-  flex: 0.8;
 }
 
 /* Container that holds the one-piece OR two-piece */
@@ -100,6 +98,54 @@
 .merge-final {
   transform: scale(1);
   opacity: 1;
+}
+
+/* SAVE BUTTON AND SNACKBAR STYLES */
+.save-outfit-wrap {
+  position: fixed;
+  right: 20px;
+  top: 80px;
+  z-index: 200;
+}
+
+.save-outfit-btn {
+  background: #ff00a2;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.snackbar {
+  position: fixed;
+  right: 20px;
+  bottom: 40px;
+  background:#eae8e7;
+  color: #333;
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #ff00a2; /* pink accent */
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 160px;
+  animation: slideUpFade 260ms ease;
+}
+
+@keyframes slideUpFade {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -154,5 +200,11 @@
   .piece-sidebar {
     height: 54px;
     border-radius: 10px;
+  }
+
+  .snackbar {
+    left: 12px;
+    right: 12px;
+    bottom: 20px;
   }
 }

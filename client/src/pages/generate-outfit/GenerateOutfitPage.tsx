@@ -238,13 +238,11 @@ export default function GenerateOutfitPage() {
           />
         </div>
 
-        <div style={{ position: 'fixed', right: 20, top: 80, zIndex: 200 }}>
-          <button onClick={saveCurrentOutfit}>Save outfit</button>
+        <div className="save-outfit-wrap">
+          <button className="save-outfit-btn" onClick={saveCurrentOutfit}>Save outfit</button>
         </div>
         {snackbar && (
-          <div style={{ position: 'fixed', right: 20, bottom: 40, background: '#222', color: '#fff', padding: '10px 14px', borderRadius: 6 }}>
-            {snackbar}
-          </div>
+          <div className="snackbar">{snackbar}</div>
         )}
       </div>
     </div>
