@@ -174,6 +174,8 @@ export default function GenerateOutfitPage() {
                     image={dress?.imageUrl}
                     tall={true}
                     onShuffle={shuffleDress}
+                    onNext={shuffleDress}
+                    onPrev={shuffleDress}
                     onAdd={shuffleDress}
                   />
                 </div>
@@ -189,6 +191,8 @@ export default function GenerateOutfitPage() {
                       label={top?.name ?? "TOP"}
                       image={top?.imageUrl}
                       onShuffle={shuffleTop}
+                      onNext={shuffleTop}
+                      onPrev={shuffleTop}
                       onAdd={shuffleTop}
                     />
                   </div>
@@ -201,6 +205,8 @@ export default function GenerateOutfitPage() {
                       label={bottom?.name ?? "BOTTOM"}
                       image={bottom?.imageUrl}
                       onShuffle={shuffleBottom}
+                      onNext={shuffleBottom}
+                      onPrev={shuffleBottom}
                       onAdd={shuffleBottom}
                     />
                   </div>
@@ -215,6 +221,8 @@ export default function GenerateOutfitPage() {
             label={outerwear?.name ?? "OUTERWEAR"}
             image={outerwear?.imageUrl}
             onAdd={shuffleOuterwear}
+            onNext={shuffleOuterwear}
+            onPrev={shuffleOuterwear}
             onRemove={() => setOuterwear(null)}
             onShuffle={shuffleOuterwear}
           />
@@ -223,6 +231,8 @@ export default function GenerateOutfitPage() {
             label={shoes?.name ?? "SHOES"}
             image={shoes?.imageUrl}
             onAdd={shuffleShoes}
+            onNext={shuffleShoes}
+            onPrev={shuffleShoes}
             onRemove={() => setShoes(null)}
             onShuffle={shuffleShoes}
           />
