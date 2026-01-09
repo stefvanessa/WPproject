@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.scss";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { FiLogOut } from "react-icons/fi";
 
 interface NavbarProps {
   activeTab: "generate" | "wardrobe" | "collections";
@@ -9,6 +11,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +43,25 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
         >
           Collections
         </div>
+      </div>
+      {/* Right-side actions (logout) */}
+      <div className="nav-actions">
+        {user && (
+          <button
+            className="logout-btn"
+            onClick={async () => {
+              try {
+                await logout();
+              } finally {
+                navigate("/login");
+              }
+            }}
+            title="Log out"
+          >
+            <FiLogOut />
+            <span className="logout-text">Log out</span>
+          </button>
+        )}
       </div>
     </div>
   );

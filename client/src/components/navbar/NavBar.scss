@@ -60,6 +60,48 @@
       }
     }
   }
+
+  /* Right-side actions */
+  .nav-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .logout-btn {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    background: transparent;
+    color: #1c1c1e;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.15s ease, transform 0.06s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  }
+
+  .logout-btn:hover {
+    background: rgba(255, 0, 162, 0.06);
+    transform: translateY(-1px);
+  }
+
+  .logout-btn .logout-text {
+    display: inline-block;
+  }
+
+  @media (max-width: 640px) {
+    .logout-btn .logout-text {
+      display: none;
+    }
+
+    .logout-btn {
+      padding: 8px;
+      border-radius: 8px;
+    }
+  }
 }
 
 @media (max-width: 768px) {
