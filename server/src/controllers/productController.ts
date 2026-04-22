@@ -18,7 +18,7 @@ import {
   clothingFits,
 } from "../data/clothingData";
 
-import { v4 as uuid } from "uuid";
+import { randomUUID as uuid } from "crypto";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {

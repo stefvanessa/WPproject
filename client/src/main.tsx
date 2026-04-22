@@ -6,6 +6,7 @@ import LoginForm from "./auth/LoginForm";
 import GenerateOutfitPage from "./pages/generate-outfit/GenerateOutfitPage";
 import CollectionsPage from "./pages/collections/CollectionsPage";
 import MyWardrobePage from "./pages/my-wardrobe/MyWardrobePage";
+import CalendarPage from "./pages/calendar/CalendarPage";
 import { AuthProvider } from "./context/AuthContext";
 import RequireAuth from "./auth/RequireAuth";
 
@@ -40,6 +41,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             element={
               <RequireAuth>
                 <CollectionsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="calendar"
+            element={
+              <RequireAuth>
+                <CalendarPage />
               </RequireAuth>
             }
           />

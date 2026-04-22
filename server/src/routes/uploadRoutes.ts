@@ -3,7 +3,7 @@ import { upload } from "../middleware/upload";
 import { s3 } from "../config/minIO";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { isAuthenticated } from "../middleware/auth";
-import { v4 as uuid } from "uuid";
+import { randomUUID as uuid } from "crypto";
 
 const router = Router();
 

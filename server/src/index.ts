@@ -10,6 +10,8 @@ import passport from "./config/passport";
 import authRoutes from "./routes/authRoutes";
 import outfitRoutes from "./routes/outfitRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
+import calendarRoutes from "./routes/calendarRoutes";
+import imageRoutes from "./routes/imageRoutes";
 import cors from "cors";
 
 const app = express();
@@ -48,9 +50,11 @@ app.use((req, _, next) => {
 app.use(express.json());
 
 app.use("/auth", authRoutes);
-app.use("/api/upload", uploadRoutes); 
+app.use("/api/upload", uploadRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/outfits", outfitRoutes);
+app.use("/api/calendar", calendarRoutes);
+app.use("/api/image", imageRoutes);
 
 
 app.get("/health", (_req, res) => res.json({ ok: true }));

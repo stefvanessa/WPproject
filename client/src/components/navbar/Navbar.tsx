@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { FiLogOut } from "react-icons/fi";
 
 interface NavbarProps {
-  activeTab: "generate" | "wardrobe" | "collections";
+  activeTab: "generate" | "wardrobe" | "collections" | "calendar";
 }
 
 const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
@@ -42,6 +42,12 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
           onClick={() => navigate("/collections")}
         >
           Collections
+        </div>
+        <div
+          className={`tab ${activeTab === "calendar" ? "active" : ""}`}
+          onClick={() => navigate("/calendar")}
+        >
+          Calendar
         </div>
       </div>
       {/* Right-side actions (logout) */}
