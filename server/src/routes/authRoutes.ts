@@ -26,27 +26,20 @@ router.get("/success", (req, res) => {
 });
  
 router.get("/logout", (req, res) => {
-  // Passport req.logout supports a callback in newer types; make sure session destroyed
-  try {
-    req.logout?.(() => {});
-  } catch (err) {
-    // ignore
-  }
- 
-  // destroy session and clear cookie
-  if (req.session) {
-    req.session.destroy((err) => {
+  req.logout((passportErr) => {
+    if (passportErr) console.error("Passport logout error:", passportErr);
+
+    if (req.session) {
+      req.session.destroy((sessionErr) => {
+        if (sessionErr) console.error("Session destroy error:", sessionErr);
+        res.clearCookie("connect.sid", { path: "/" });
+        res.json({ message: "Logged out" });
+      });
+    } else {
       res.clearCookie("connect.sid", { path: "/" });
-      if (err) {
-        console.error("Failed to destroy session on logout:", err);
-        return res.status(500).json({ message: "Logged out (session destroy failed)" });
-      }
-      return res.json({ message: "Logged out" });
-    });
-  } else {
-    res.clearCookie("connect.sid", { path: "/" });
-    res.json({ message: "Logged out" });
-  }
+      res.json({ message: "Logged out" });
+    }
+  });
 });
  
 export default router;
