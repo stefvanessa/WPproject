@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./Navbar.scss";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiSmartphone } from "react-icons/fi";
+import PairModal from "../pair-modal/PairModal";
 
 interface NavbarProps {
   activeTab: "generate" | "wardrobe" | "collections" | "calendar";
@@ -10,6 +11,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [pairOpen, setPairOpen] = useState(false);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
@@ -50,25 +52,32 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
           Calendar
         </div>
       </div>
-      {/* Right-side actions (logout) */}
+      {/* Right-side actions */}
       <div className="nav-actions">
         {user && (
-          <button
-            className="logout-btn"
-            onClick={async () => {
-              try {
-                await logout();
-              } finally {
-                navigate("/login");
-              }
-            }}
-            title="Log out"
-          >
-            <FiLogOut />
-            <span className="logout-text">Log out</span>
-          </button>
+          <>
+            <button
+              className="connect-btn"
+              onClick={() => setPairOpen(true)}
+              title="Connect mobile app"
+            >
+              <FiSmartphone />
+            </button>
+            <button
+              className="logout-btn"
+              onClick={async () => {
+                try { await logout(); } finally { navigate("/login"); }
+              }}
+              title="Log out"
+            >
+              <FiLogOut />
+              <span className="logout-text">Log out</span>
+            </button>
+          </>
         )}
       </div>
+
+      <PairModal open={pairOpen} onClose={() => setPairOpen(false)} />
     </div>
   );
 };

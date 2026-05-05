@@ -13,6 +13,7 @@ import uploadRoutes from "./routes/uploadRoutes";
 import calendarRoutes from "./routes/calendarRoutes";
 import imageRoutes from "./routes/imageRoutes";
 import removeBgRoute from "./routes/removeBgRoute";
+import pairRoutes from "./routes/pairRoutes";
 import cors from "cors";
 
 const app = express();
@@ -57,6 +58,7 @@ app.use("/api/outfits", outfitRoutes);
 app.use("/api/calendar", calendarRoutes);
 app.use("/api/image", imageRoutes);
 app.use("/api/remove-bg", removeBgRoute);
+app.use("/api/pair", pairRoutes);
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.get("/", (_req, res) => res.send("Hello from server"));

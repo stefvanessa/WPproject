@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "SnapFit",
+    "slug": "snapfit",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.snapfit.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Used to scan the pairing QR code"
+      }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow SnapFit to access your camera to scan the pairing QR code."
+        }
+      ],
+      "expo-secure-store"
+    ]
+  }
+}

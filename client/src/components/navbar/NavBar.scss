@@ -66,6 +66,27 @@
     margin-left: auto;
     display: flex;
     align-items: center;
+    gap: 4px;
+  }
+
+  .connect-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #1c1c1e;
+    font-size: 16px;
+    transition: background 0.15s ease, color 0.15s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      background: rgba(255, 0, 162, 0.06);
+      color: #ff00a2;
+    }
   }
 
   .logout-btn {
