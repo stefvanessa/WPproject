@@ -54,48 +54,9 @@ export const createProduct = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // 1. Generate unique filename and (optionally) remove background via remove.bg
-    let fileName = `${uuid()}-${req.file.originalname}`;
-    let uploadBody: Buffer = req.file.buffer;
-    let contentType = req.file.mimetype;
-
-    const apiKey = process.env.REMOVE_BG_API_KEY;
-    if (apiKey) {
-      try {
-        // Build form data to send to external remove-bg service
-        const form = new FormData();
-        // Convert Node Buffer to Uint8Array so Blob accepts the data in TypeScript
-        const uint8 = new Uint8Array(req.file.buffer);
-        const blob = new Blob([uint8], { type: req.file.mimetype });
-        form.append("image_file", blob, req.file.originalname);
-        form.append("size", "auto");
-
-        const resp = await fetch("https://api.remove.bg/v1.0/removebg", {
-          method: "POST",
-          headers: {
-            "X-Api-Key": apiKey,
-            // Note: do not set Content-Type here — fetch will set the multipart boundary for FormData
-          },
-          body: form,
-        });
-
-        if (!resp.ok) {
-          const txt = await resp.text();
-          return res.status(resp.status).send(txt);
-        }
-
-        const array = await resp.arrayBuffer();
-        contentType = resp.headers.get("content-type") ?? "image/png";
-        uploadBody = Buffer.from(array);
-        fileName = `${uuid()}-cleaned.png`;
-      } catch (bgErr) {
-        console.error("remove.bg error, falling back to original image:", bgErr);
-        // Continue and upload original image buffer
-        uploadBody = req.file.buffer;
-        contentType = req.file.mimetype;
-        fileName = `${uuid()}-${req.file.originalname}`;
-      }
-    }
+    const fileName = `${uuid()}-${req.file.originalname}`;
+    const uploadBody: Buffer = req.file.buffer;
+    const contentType = req.file.mimetype;
 
     // Ensure bucket exists (for local MinIO)
     try {

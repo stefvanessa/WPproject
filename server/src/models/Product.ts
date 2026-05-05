@@ -57,9 +57,8 @@ const ProductSchema = new Schema<IProduct>(
     },
 
     style: {
-      type: [String],        // array of strings
+      type: [String],
       required: true,
-      enum: clothingStyles   // each must be part of the style list
     },
 
     temperature: 
