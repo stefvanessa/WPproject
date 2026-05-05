@@ -1,8 +1,33 @@
 import type { Request, Response } from 'express';
 import { Outfit } from '../models/Outfit';
+import { Product } from '../models/Product';
 import { s3 } from '../config/minIO';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { buildOutfitSuggestions } from '../services/outfitRecommendationService';
+
+const productFields = ['top', 'bottom', 'dress', 'outerwear', 'shoes'];
+
+const addSignedProductImages = async (obj: Record<string, any>) => {
+  for (const field of productFields) {
+    const product = obj[field];
+    if (product && product.imageKey) {
+      const plainProduct =
+        typeof product.toObject === 'function' ? product.toObject() : { ...product };
+
+      try {
+        const cmd = new GetObjectCommand({ Bucket: process.env.MINIO_BUCKET, Key: plainProduct.imageKey });
+        plainProduct.imageUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+      } catch (err) {
+        console.error('Failed to generate signed url for outfit product', err);
+      }
+
+      obj[field] = plainProduct;
+    }
+  }
+
+  return obj;
+};
 
 export const createOutfit = async (req: Request, res: Response) => {
   try {
@@ -39,27 +64,10 @@ export const getOutfits = async (req: Request, res: Response) => {
       { path: 'shoes' },
     ]);
 
-    // Enrich each populated product with a signed imageUrl (MinIO)
     const enriched = await Promise.all(
       outfits.map(async (o) => {
-        // Convert mongoose doc to plain object
         const obj: any = typeof o.toObject === 'function' ? o.toObject() : { ...o };
-
-        const fields = ['top', 'bottom', 'dress', 'outerwear', 'shoes'];
-        for (const f of fields) {
-          const prod = obj[f];
-          if (prod && prod.imageKey) {
-            try {
-              const cmd = new GetObjectCommand({ Bucket: process.env.MINIO_BUCKET, Key: prod.imageKey });
-              const url = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
-              prod.imageUrl = url;
-            } catch (err) {
-              console.error('Failed to generate signed url for outfit product', err);
-            }
-          }
-        }
-
-        return obj;
+        return addSignedProductImages(obj);
       })
     );
 
@@ -67,6 +75,37 @@ export const getOutfits = async (req: Request, res: Response) => {
   } catch (err) {
     console.error('Error fetching outfits', err);
     res.status(500).json({ message: 'Error fetching outfits' });
+  }
+};
+
+export const suggestOutfits = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) return res.status(401).json({ message: 'Not authenticated' });
+
+    const body = req.body as Record<string, any>;
+    const count = body.count ? Number(body.count) : undefined;
+    const temperature = body.temperature ? String(body.temperature) : undefined;
+    const style = body.style ? String(body.style) : undefined;
+
+    const products = await Product.find({ user: (req.user as any)._id });
+    const suggestions = buildOutfitSuggestions(products as any, {
+      temperature,
+      style,
+      count: Number.isFinite(count) ? count : undefined,
+    });
+
+    const enriched = await Promise.all(
+      suggestions.map(async (suggestion) => addSignedProductImages({ ...suggestion }))
+    );
+
+    res.json({
+      filters: { temperature, style },
+      count: enriched.length,
+      suggestions: enriched,
+    });
+  } catch (err) {
+    console.error('Error suggesting outfits', err);
+    res.status(500).json({ message: 'Error suggesting outfits' });
   }
 };
 

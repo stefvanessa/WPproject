@@ -4,7 +4,7 @@ dotenv.config();
 import mongoose from "mongoose";
 import { s3 } from "./config/minIO";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { v4 as uuid } from "uuid";
+import { randomUUID as uuid } from "crypto";
 import { Product } from "./models/Product";
 import fs from "fs";
 

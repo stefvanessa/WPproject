@@ -3,6 +3,7 @@ import Navbar from "../../components/navbar/Navbar";
 import ClothingCard from "../../components/clothing-card/ClothingCard";
 import { useEffect, useMemo, useState } from "react";
 import { fetchProducts, type Product } from "../../api/products";
+import { generateOutfitSuggestion, saveOutfit } from "../../api/outfits";
 
 type CategoryKey = "tops" | "bottoms" | "outerwear" | "dresses" | "footwear";
 const categoryKeys: CategoryKey[] = ["tops", "bottoms", "outerwear", "dresses", "footwear"];
@@ -21,8 +22,10 @@ export default function GenerateOutfitPage() {
   const [animClass, setAnimClass] = useState("fade-enter-active");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState<string | null>(null);
+  const [outfitReasons, setOutfitReasons] = useState<string[]>([]);
 
   const [top, setTop] = useState<Product | null>(null);
   const [bottom, setBottom] = useState<Product | null>(null);
@@ -110,6 +113,39 @@ export default function GenerateOutfitPage() {
     setShoes(nextItem(footwear, shoes?._id));
   };
 
+  const showSnackbar = (message: string) => {
+    setSnackbar(message);
+    setTimeout(() => setSnackbar(null), 2500);
+  };
+
+  const generateOutfit = async () => {
+    try {
+      setGenerating(true);
+      setError(null);
+
+      const data = await generateOutfitSuggestion({ count: 10 });
+      if (data.suggestions.length === 0) {
+        showSnackbar("Add more wardrobe items first");
+        return;
+      }
+
+      const suggestion = data.suggestions[Math.floor(Math.random() * data.suggestions.length)];
+
+      setTwoPiece(!suggestion.dress);
+      setTop(suggestion.top ?? null);
+      setBottom(suggestion.bottom ?? null);
+      setDress(suggestion.dress ?? null);
+      setOuterwear(suggestion.outerwear ?? null);
+      setShoes(suggestion.shoes ?? null);
+      setOutfitReasons(suggestion.reasons ?? []);
+      showSnackbar("Outfit generated");
+    } catch (err: any) {
+      showSnackbar(err.message ?? "Failed generating outfit");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   const saveCurrentOutfit = async () => {
     try {
       const payload: any = { name: '' };
@@ -137,7 +173,6 @@ export default function GenerateOutfitPage() {
       if (outerwear) payload.outerwear = outerwear._id;
       if (shoes) payload.shoes = shoes._id;
 
-      const { saveOutfit } = await import('../../api/outfits');
       await saveOutfit(payload);
       setSnackbar('Outfit saved');
       setTimeout(() => setSnackbar(null), 2500);
@@ -239,8 +274,20 @@ export default function GenerateOutfitPage() {
         </div>
 
         <div className="save-outfit-wrap">
+          <button className="generate-outfit-btn" onClick={generateOutfit} disabled={generating || loading}>
+            {generating ? "Generating..." : "Generate outfit"}
+          </button>
           <button className="save-outfit-btn" onClick={saveCurrentOutfit}>Save outfit</button>
         </div>
+
+        {outfitReasons.length > 0 && (
+          <div className="outfit-reasons">
+            {outfitReasons.slice(0, 3).map((reason) => (
+              <span key={reason}>{reason}</span>
+            ))}
+          </div>
+        )}
+
         {snackbar && (
           <div className="snackbar">{snackbar}</div>
         )}

@@ -1,4 +1,5 @@
 import { apiFetch } from './client';
+import type { Product } from './products';
 
 export type OutfitPayload = {
   name?: string;
@@ -7,6 +8,22 @@ export type OutfitPayload = {
   dress?: string;
   outerwear?: string;
   shoes?: string;
+};
+
+export type OutfitSuggestion = {
+  score: number;
+  reasons: string[];
+  top?: Product;
+  bottom?: Product;
+  dress?: Product;
+  outerwear?: Product;
+  shoes?: Product;
+};
+
+export type OutfitSuggestionPayload = {
+  temperature?: string;
+  style?: string;
+  count?: number;
 };
 
 export async function saveOutfit(payload: OutfitPayload) {
@@ -18,7 +35,18 @@ export async function saveOutfit(payload: OutfitPayload) {
 }
 
 export async function fetchOutfits() {
-  return apiFetch('/api/outfits');
+  return apiFetch<any[]>('/api/outfits');
+}
+
+export async function generateOutfitSuggestion(payload: OutfitSuggestionPayload = {}) {
+  return apiFetch<{
+    filters: { temperature?: string; style?: string };
+    count: number;
+    suggestions: OutfitSuggestion[];
+  }>('/api/outfits/suggestions', {
+    method: 'POST',
+    body: payload as unknown as BodyInit,
+  });
 }
 
 export async function deleteOutfit(id: string) {
