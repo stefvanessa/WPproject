@@ -8,11 +8,15 @@ import {
   getProductMeta
 } from "../controllers/productController";
 import { isAuthenticated } from "../middleware/auth";
-import { upload } from "../middleware/upload"; // ✅ use your custom upload (memoryStorage)
+import { upload } from "../middleware/upload"; //  use your custom upload (memoryStorage)
 
 const router = Router();
 
 // Create (with image upload)
+// When someone sends a POST request to /api/products,
+// first check if they are logged in,
+// then process one uploaded image called image,
+// then create the product.
 router.post("/", isAuthenticated, upload.single("image"), createProduct);
 
 // Read all + filtering

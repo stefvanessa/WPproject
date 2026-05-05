@@ -41,7 +41,7 @@ async function run() {
       style: ["casual"],
       temperature: ["cold"],
       imageKey: fileName,
-      user: "676a0f34d123456789abcdef" // ⚠ any fake ObjectId
+      user: "676a0f34d123456789abcdef" // any fake ObjectId
     });
 
     console.log("Product created:", product);

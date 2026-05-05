@@ -35,8 +35,10 @@ export const createProduct = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Image is required" });
     }
 
+    //it reads form fields
     const body = req.body as Record<string, any>;
 
+    //style and temperature are always arrays
     const normalizeArray = (value: unknown): string[] => {
       if (Array.isArray(value)) return value as string[];
       if (value === undefined || value === null) return [];
@@ -160,8 +162,13 @@ export const createProduct = async (req: Request, res: Response) => {
 export const getProducts = async (req: Request, res: Response) => {
   try {
     const filters: any = { user: (req.user as any)._id };
-
+    //     const products = await Product.find({
+    //   user: (req.user as any)._id,
+    //   color: "black",
+    //   type: "tshirt"
+    // });
     // Build dynamic filters
+    //only filter by fields the client provided
     if (req.query.color) filters.color = req.query.color;
     if (req.query.type) filters.type = req.query.type;
     if (req.query.fit) filters.fit = req.query.fit;
@@ -284,6 +291,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 };
 
 // PRODUCT METADATA (options for client forms)
+//Return dropdown values for frontend forms
 export const getProductMeta = (_req: Request, res: Response) => {
   res.json({
     clothingCategories,

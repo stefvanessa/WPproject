@@ -1,16 +1,21 @@
+//handles web requests
 import { Router } from "express";
 import passport from "passport";
  
 const router = Router();
- 
+
+//redirects the browser to Google’s login page 
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
- 
+
+//Google sends the user back
 router.get(
   "/google/callback",
+  //exchanges that code for user info
   passport.authenticate("google", {
+    //Then redirect to frontend:
     successRedirect: "http://localhost:5173/wardrobe",
     failureRedirect: "http://localhost:5173/login",
   })
