@@ -86,12 +86,16 @@ export const suggestOutfits = async (req: Request, res: Response) => {
     const count = body.count ? Number(body.count) : undefined;
     const temperature = body.temperature ? String(body.temperature) : undefined;
     const style = body.style ? String(body.style) : undefined;
+    const pinnedProductIds = Array.isArray(body.pinnedProductIds)
+      ? body.pinnedProductIds.map(String).filter(Boolean)
+      : undefined;
 
     const products = await Product.find({ user: (req.user as any)._id });
     const suggestions = buildOutfitSuggestions(products as any, {
       temperature,
       style,
       count: Number.isFinite(count) ? count : undefined,
+      pinnedProductIds,
     });
 
     const enriched = await Promise.all(
@@ -99,7 +103,7 @@ export const suggestOutfits = async (req: Request, res: Response) => {
     );
 
     res.json({
-      filters: { temperature, style },
+      filters: { temperature, style, pinnedProductIds },
       count: enriched.length,
       suggestions: enriched,
     });

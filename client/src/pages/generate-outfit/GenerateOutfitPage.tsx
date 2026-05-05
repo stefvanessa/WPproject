@@ -6,6 +6,8 @@ import { fetchProducts, type Product } from "../../api/products";
 import { generateOutfitSuggestion, saveOutfit } from "../../api/outfits";
 
 type CategoryKey = "tops" | "bottoms" | "outerwear" | "dresses" | "footwear";
+type OutfitSlot = "top" | "bottom" | "dress" | "outerwear" | "shoes";
+
 const categoryKeys: CategoryKey[] = ["tops", "bottoms", "outerwear", "dresses", "footwear"];
 
 function nextItem(list: Product[], currentId?: string | null) {
@@ -31,6 +33,13 @@ export default function GenerateOutfitPage() {
   const [dress, setDress] = useState<Product | null>(null);
   const [outerwear, setOuterwear] = useState<Product | null>(null);
   const [shoes, setShoes] = useState<Product | null>(null);
+  const [pinnedSlots, setPinnedSlots] = useState<Record<OutfitSlot, boolean>>({
+    top: false,
+    bottom: false,
+    dress: false,
+    outerwear: false,
+    shoes: false,
+  });
 
   useEffect(() => {
     let mounted = true;
@@ -92,22 +101,27 @@ export default function GenerateOutfitPage() {
   };
 
   const shuffleTop = () => {
+    if (pinnedSlots.top) return;
     const tops = byCategory.get("tops") ?? [];
     setTop(nextItem(tops, top?._id));
   };
   const shuffleBottom = () => {
+    if (pinnedSlots.bottom) return;
     const bottoms = byCategory.get("bottoms") ?? [];
     setBottom(nextItem(bottoms, bottom?._id));
   };
   const shuffleDress = () => {
+    if (pinnedSlots.dress) return;
     const dresses = byCategory.get("dresses") ?? [];
     setDress(nextItem(dresses, dress?._id));
   };
   const shuffleOuterwear = () => {
+    if (pinnedSlots.outerwear) return;
     const jackets = byCategory.get("outerwear") ?? [];
     setOuterwear(nextItem(jackets, outerwear?._id));
   };
   const shuffleShoes = () => {
+    if (pinnedSlots.shoes) return;
     const footwear = byCategory.get("footwear") ?? [];
     setShoes(nextItem(footwear, shoes?._id));
   };
@@ -117,14 +131,30 @@ export default function GenerateOutfitPage() {
     setTimeout(() => setSnackbar(null), 2500);
   };
 
+  const togglePin = (slot: OutfitSlot) => {
+    setPinnedSlots((prev) => ({ ...prev, [slot]: !prev[slot] }));
+  };
+
+  const pinnedProductIds = () =>
+    [
+      pinnedSlots.top ? top?._id : null,
+      pinnedSlots.bottom ? bottom?._id : null,
+      pinnedSlots.dress ? dress?._id : null,
+      pinnedSlots.outerwear ? outerwear?._id : null,
+      pinnedSlots.shoes ? shoes?._id : null,
+    ].filter((id): id is string => Boolean(id));
+
   const generateOutfit = async () => {
     try {
       setGenerating(true);
       setError(null);
 
-      const data = await generateOutfitSuggestion({ count: 10 });
+      const data = await generateOutfitSuggestion({
+        count: 10,
+        pinnedProductIds: pinnedProductIds(),
+      });
       if (data.suggestions.length === 0) {
-        showSnackbar("Add more wardrobe items first");
+        showSnackbar("No outfit works with the pinned items");
         return;
       }
 
@@ -211,6 +241,8 @@ export default function GenerateOutfitPage() {
                     onPrev={shuffleDress}
                     onAdd={shuffleDress}
                     hideEmptyLabel
+                    pinned={pinnedSlots.dress}
+                    onTogglePin={dress ? () => togglePin("dress") : undefined}
                   />
                 </div>
               )}
@@ -229,6 +261,8 @@ export default function GenerateOutfitPage() {
                       onPrev={shuffleTop}
                       onAdd={shuffleTop}
                       hideEmptyLabel
+                      pinned={pinnedSlots.top}
+                      onTogglePin={top ? () => togglePin("top") : undefined}
                     />
                   </div>
 
@@ -244,6 +278,8 @@ export default function GenerateOutfitPage() {
                       onPrev={shuffleBottom}
                       onAdd={shuffleBottom}
                       hideEmptyLabel
+                      pinned={pinnedSlots.bottom}
+                      onTogglePin={bottom ? () => togglePin("bottom") : undefined}
                     />
                   </div>
                 </div>
@@ -262,6 +298,8 @@ export default function GenerateOutfitPage() {
             onRemove={() => setOuterwear(null)}
             onShuffle={shuffleOuterwear}
             hideEmptyLabel
+            pinned={pinnedSlots.outerwear}
+            onTogglePin={outerwear ? () => togglePin("outerwear") : undefined}
           />
 
           <ClothingCard
@@ -273,6 +311,8 @@ export default function GenerateOutfitPage() {
             onRemove={() => setShoes(null)}
             onShuffle={shuffleShoes}
             hideEmptyLabel
+            pinned={pinnedSlots.shoes}
+            onTogglePin={shoes ? () => togglePin("shoes") : undefined}
           />
         </div>
 

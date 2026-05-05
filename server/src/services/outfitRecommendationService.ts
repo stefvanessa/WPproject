@@ -9,6 +9,7 @@ export interface OutfitSuggestionOptions {
   temperature?: string;
   style?: string;
   count?: number;
+  pinnedProductIds?: string[];
 }
 
 export interface OutfitSuggestion {
@@ -244,6 +245,24 @@ const uniqueByItems = (suggestions: OutfitSuggestion[]) => {
   });
 };
 
+const suggestionProductIds = (suggestion: OutfitSuggestion) =>
+  [
+    suggestion.top?._id,
+    suggestion.bottom?._id,
+    suggestion.dress?._id,
+    suggestion.outerwear?._id,
+    suggestion.shoes?._id,
+  ]
+    .filter(Boolean)
+    .map(String);
+
+const includesPinnedProducts = (suggestion: OutfitSuggestion, pinnedProductIds?: string[]) => {
+  if (!pinnedProductIds || pinnedProductIds.length === 0) return true;
+
+  const suggestionIds = new Set(suggestionProductIds(suggestion));
+  return pinnedProductIds.every((id) => suggestionIds.has(id));
+};
+
 export const buildOutfitSuggestions = (
   products: ProductDoc[],
   options: OutfitSuggestionOptions = {}
@@ -278,7 +297,7 @@ export const buildOutfitSuggestions = (
         }
 
         const needsOuterwear = options.temperature ? coldWeather.has(options.temperature) : false;
-        const outerwearChoices = needsOuterwear && outerwear.length > 0 ? outerwear : [undefined];
+        const outerwearChoices = outerwear.length > 0 ? [undefined, ...outerwear] : [undefined];
 
         for (const coat of outerwearChoices) {
           let finalScore = score;
@@ -286,8 +305,11 @@ export const buildOutfitSuggestions = (
 
           if (coat) {
             const coatPair = pairScore(top, coat, options.style);
-            finalScore += Math.round(coatPair.score / 2) + 8;
-            finalReasons.push("outerwear added for colder weather", ...coatPair.reasons.slice(0, 2));
+            finalScore += Math.round(coatPair.score / 2) + (needsOuterwear ? 8 : 2);
+            finalReasons.push(
+              needsOuterwear ? "outerwear added for colder weather" : "outerwear adds structure",
+              ...coatPair.reasons.slice(0, 2)
+            );
           }
 
           suggestions.push({
@@ -319,7 +341,7 @@ export const buildOutfitSuggestions = (
       }
 
       const needsOuterwear = options.temperature ? coldWeather.has(options.temperature) : false;
-      const outerwearChoices = needsOuterwear && outerwear.length > 0 ? outerwear : [undefined];
+      const outerwearChoices = outerwear.length > 0 ? [undefined, ...outerwear] : [undefined];
 
       for (const coat of outerwearChoices) {
         let finalScore = score;
@@ -327,8 +349,16 @@ export const buildOutfitSuggestions = (
 
         if (coat) {
           const coatPair = pairScore(dress, coat, options.style);
-          finalScore += Math.round(coatPair.score / 2) + 8;
-          finalReasons.push("outerwear added for colder weather", ...coatPair.reasons.slice(0, 2));
+          const dressBlazerBonus = dress.type === "dress" && coat.type === "blazer" ? 12 : 0;
+          finalScore += Math.round(coatPair.score / 2) + (needsOuterwear ? 8 : 4) + dressBlazerBonus;
+          finalReasons.push(
+            needsOuterwear ? "outerwear added for colder weather" : "outerwear adds structure",
+            ...coatPair.reasons.slice(0, 2)
+          );
+
+          if (dressBlazerBonus > 0) {
+            finalReasons.push("blazer sharpens a simple dress");
+          }
         }
 
         suggestions.push({
@@ -343,6 +373,7 @@ export const buildOutfitSuggestions = (
   }
 
   return uniqueByItems(suggestions)
+    .filter((suggestion) => includesPinnedProducts(suggestion, options.pinnedProductIds))
     .sort((left, right) => right.score - left.score)
     .slice(0, count);
 };

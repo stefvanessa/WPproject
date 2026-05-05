@@ -129,6 +129,14 @@
   background: #e04545; // red
 }
 
+.action-btn.pin {
+  background: #666;
+}
+
+.action-btn.pin.active {
+  background: #111;
+}
+
 /* ----- ADD BUTTON ----- */
 .add-btn {
   background: white;

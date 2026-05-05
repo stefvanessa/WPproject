@@ -24,6 +24,7 @@ export type OutfitSuggestionPayload = {
   temperature?: string;
   style?: string;
   count?: number;
+  pinnedProductIds?: string[];
 };
 
 export async function saveOutfit(payload: OutfitPayload) {

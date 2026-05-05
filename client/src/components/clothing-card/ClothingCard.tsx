@@ -1,5 +1,5 @@
 import "./ClothingCard.scss";
-import { FiChevronLeft, FiChevronRight, FiRefreshCw, FiTrash2 } from "react-icons/fi";
+import { FiChevronLeft, FiChevronRight, FiLock, FiRefreshCw, FiTrash2, FiUnlock } from "react-icons/fi";
 
 type ClothingCardProps = {
   image?: string;
@@ -11,6 +11,8 @@ type ClothingCardProps = {
   onShuffle?: () => void;
   onRemove?: () => void;
   hideEmptyLabel?: boolean;
+  pinned?: boolean;
+  onTogglePin?: () => void;
 };
 
 export default function ClothingCard({
@@ -22,7 +24,9 @@ export default function ClothingCard({
   onAdd,
   onShuffle,
   onRemove,
-  hideEmptyLabel = false
+  hideEmptyLabel = false,
+  pinned = false,
+  onTogglePin
 }: ClothingCardProps) {
   return (
     <div className={`clothing-card ${tall ? "tall" : ""}`}>
@@ -47,6 +51,11 @@ export default function ClothingCard({
               <span className="tooltip">Remove</span>
             </div>
             }
+
+            {onTogglePin && <div className={`action-btn pin ${pinned ? "active" : ""}`} onClick={onTogglePin}>
+              {pinned ? <FiLock /> : <FiUnlock />}
+              <span className="tooltip">{pinned ? "Pinned" : "Pin"}</span>
+            </div>}
 
           </div>
         </>
