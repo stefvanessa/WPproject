@@ -11,7 +11,7 @@ services:
       - mongodb
       - minio
     environment:
-      - MONGO_URI=mongodb://localhost:27017/mydb
+      - MONGO_URI=mongodb://mongodb:27017/mydb
       - NODE_ENV=development
       - MINIO_ENDPOINT=http://minio:9000
       - MINIO_ROOT_USER=minioadmin
@@ -21,8 +21,8 @@ services:
   mongodb: 
     image: mongo:6.0
     container_name: mongodb_web_project
-    ports: 
-      - "37017:27017"
+    ports:
+      - "27017:27017"
     volumes: 
       - mongodb_data:/data/db
 
