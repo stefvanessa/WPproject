@@ -25,7 +25,6 @@ export default function GenerateOutfitPage() {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState<string | null>(null);
-  const [outfitReasons, setOutfitReasons] = useState<string[]>([]);
 
   const [top, setTop] = useState<Product | null>(null);
   const [bottom, setBottom] = useState<Product | null>(null);
@@ -137,7 +136,6 @@ export default function GenerateOutfitPage() {
       setDress(suggestion.dress ?? null);
       setOuterwear(suggestion.outerwear ?? null);
       setShoes(suggestion.shoes ?? null);
-      setOutfitReasons(suggestion.reasons ?? []);
       showSnackbar("Outfit generated");
     } catch (err: any) {
       showSnackbar(err.message ?? "Failed generating outfit");
@@ -212,6 +210,7 @@ export default function GenerateOutfitPage() {
                     onNext={shuffleDress}
                     onPrev={shuffleDress}
                     onAdd={shuffleDress}
+                    hideEmptyLabel
                   />
                 </div>
               )}
@@ -229,6 +228,7 @@ export default function GenerateOutfitPage() {
                       onNext={shuffleTop}
                       onPrev={shuffleTop}
                       onAdd={shuffleTop}
+                      hideEmptyLabel
                     />
                   </div>
 
@@ -243,6 +243,7 @@ export default function GenerateOutfitPage() {
                       onNext={shuffleBottom}
                       onPrev={shuffleBottom}
                       onAdd={shuffleBottom}
+                      hideEmptyLabel
                     />
                   </div>
                 </div>
@@ -260,6 +261,7 @@ export default function GenerateOutfitPage() {
             onPrev={shuffleOuterwear}
             onRemove={() => setOuterwear(null)}
             onShuffle={shuffleOuterwear}
+            hideEmptyLabel
           />
 
           <ClothingCard
@@ -270,6 +272,7 @@ export default function GenerateOutfitPage() {
             onPrev={shuffleShoes}
             onRemove={() => setShoes(null)}
             onShuffle={shuffleShoes}
+            hideEmptyLabel
           />
         </div>
 
@@ -279,14 +282,6 @@ export default function GenerateOutfitPage() {
           </button>
           <button className="save-outfit-btn" onClick={saveCurrentOutfit}>Save outfit</button>
         </div>
-
-        {outfitReasons.length > 0 && (
-          <div className="outfit-reasons">
-            {outfitReasons.slice(0, 3).map((reason) => (
-              <span key={reason}>{reason}</span>
-            ))}
-          </div>
-        )}
 
         {snackbar && (
           <div className="snackbar">{snackbar}</div>

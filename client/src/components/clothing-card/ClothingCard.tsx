@@ -10,6 +10,7 @@ type ClothingCardProps = {
   onAdd?: () => void;
   onShuffle?: () => void;
   onRemove?: () => void;
+  hideEmptyLabel?: boolean;
 };
 
 export default function ClothingCard({
@@ -20,7 +21,8 @@ export default function ClothingCard({
   onNext,
   onAdd,
   onShuffle,
-  onRemove
+  onRemove,
+  hideEmptyLabel = false
 }: ClothingCardProps) {
   return (
     <div className={`clothing-card ${tall ? "tall" : ""}`}>
@@ -49,9 +51,13 @@ export default function ClothingCard({
           </div>
         </>
       ) : (
-        <button className="add-btn" onClick={onAdd}>
-          + ADD {label}
-        </button>
+        hideEmptyLabel ? (
+          <button className="empty-card-btn" onClick={onAdd} aria-label={`Add ${label}`} />
+        ) : (
+          <button className="add-btn" onClick={onAdd}>
+            + ADD {label}
+          </button>
+        )
       )}
     </div>
   );
