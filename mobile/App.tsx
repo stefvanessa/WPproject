@@ -5,8 +5,16 @@ import { ActivityIndicator, View } from "react-native";
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
 import ConnectScreen from "./src/screens/ConnectScreen";
 import WardrobeScreen from "./src/screens/WardrobeScreen";
+import CameraScreen from "./src/screens/CameraScreen";
+import AddItemScreen from "./src/screens/AddItemScreen";
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Wardrobe: undefined;
+  Camera: undefined;
+  AddItem: { photoUri: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const { token, loading } = useAuth();
@@ -19,13 +27,19 @@ function RootNavigator() {
     );
   }
 
+  if (!token) {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Wardrobe" component={ConnectScreen} />
+      </Stack.Navigator>
+    );
+  }
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {token ? (
-        <Stack.Screen name="Wardrobe" component={WardrobeScreen} />
-      ) : (
-        <Stack.Screen name="Connect" component={ConnectScreen} />
-      )}
+      <Stack.Screen name="Wardrobe" component={WardrobeScreen} />
+      <Stack.Screen name="Camera" component={CameraScreen} />
+      <Stack.Screen name="AddItem" component={AddItemScreen} />
     </Stack.Navigator>
   );
 }

@@ -11,11 +11,17 @@ import {
   Alert,
 } from "react-native";
 import { useEffect, useState, useCallback } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "../../App";
 import { fetchProducts, type Product } from "../api";
 import { useAuth } from "../context/AuthContext";
 
-export default function WardrobeScreen() {
+type Props = NativeStackScreenProps<RootStackParamList, "Wardrobe">;
+
+export default function WardrobeScreen({ navigation }: Props) {
   const { token, user, logout } = useAuth();
+  const isFocused = useIsFocused();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -39,7 +45,7 @@ export default function WardrobeScreen() {
     [token]
   );
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { if (isFocused) load(); }, [load, isFocused]);
 
   function handleLogout() {
     Alert.alert("Disconnect", "Disconnect this device from SnapFit?", [
@@ -118,6 +124,11 @@ export default function WardrobeScreen() {
           }
         />
       )}
+
+      {/* Floating add button */}
+      <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate("Camera")}>
+        <Text style={styles.fabText}>+</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -187,4 +198,21 @@ const styles = StyleSheet.create({
   },
   retryText: { color: "#fff", fontWeight: "600" },
   emptyText: { color: "#aaa", fontSize: 14 },
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 30,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: PINK,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: PINK,
+    shadowOpacity: 0.45,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
+  },
+  fabText: { color: "#fff", fontSize: 30, fontWeight: "300", lineHeight: 34 },
 });
