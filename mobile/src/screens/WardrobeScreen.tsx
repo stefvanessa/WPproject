@@ -56,7 +56,11 @@ export default function WardrobeScreen({ navigation }: Props) {
 
   function renderItem({ item }: { item: Product }) {
     return (
-      <View style={styles.card}>
+      <TouchableOpacity
+        style={styles.card}
+        activeOpacity={0.75}
+        onPress={() => navigation.navigate("TryOn", { item })}
+      >
         {item.imageUrl ? (
           <Image
             source={{ uri: item.imageUrl }}
@@ -70,7 +74,7 @@ export default function WardrobeScreen({ navigation }: Props) {
           {item.name}
         </Text>
         <Text style={styles.cardType}>{item.type}</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 
