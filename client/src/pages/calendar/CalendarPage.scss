@@ -1,5 +1,5 @@
 .calendar-page {
-  background: #f7f6f4;
+  background: #f7f3ee;
   min-height: 100vh;
   padding: 40px 0;
 }
@@ -30,7 +30,7 @@
   align-items: center;
   gap: 7px;
   padding: 8px 16px;
-  background: #3d3d3d;
+  background: #3e4246;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -59,10 +59,10 @@
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
 
-  svg { color: #ff00a2; flex-shrink: 0; }
+  svg { color: #7fa6d9; flex-shrink: 0; }
 
   &:hover {
-    background: #f0efed;
+    background: #f7f3ee;
     border-color: #ccc;
   }
 }
@@ -73,12 +73,12 @@
   gap: 7px;
   padding: 7px 12px;
   background: white;
-  border: 1.5px solid #d0c8ff;
+  border: 1.5px solid #b8d0ee;
   border-radius: 10px;
   min-width: 200px;
   position: relative;
 
-  .location-pin { color: #ff00a2; flex-shrink: 0; }
+  .location-pin { color: #7fa6d9; flex-shrink: 0; }
 }
 
 .location-suggestions {
@@ -106,9 +106,9 @@
     cursor: pointer;
     transition: background 0.15s ease;
 
-    svg { color: #ff00a2; flex-shrink: 0; }
+    svg { color: #7fa6d9; flex-shrink: 0; }
 
-    &:hover { background: #faf9f8; }
+    &:hover { background: #f7f3ee; }
   }
 }
 
@@ -130,7 +130,7 @@
   width: 13px;
   height: 13px;
   border: 2px solid #e0dfdd;
-  border-top-color: #ff00a2;
+  border-top-color: #7fa6d9;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   flex-shrink: 0;
@@ -155,7 +155,7 @@
 .month-title {
   font-size: 22px;
   font-weight: 600;
-  color: #2e2e2e;
+  color: #3e4246;
   min-width: 200px;
   text-align: center;
 }
@@ -167,18 +167,18 @@
   padding: 8px 12px;
   cursor: pointer;
   font-size: 18px;
-  color: #3d3d3d;
+  color: #3e4246;
   display: flex;
   align-items: center;
   transition: background 0.2s ease;
 
   &:hover {
-    background: #f0efed;
+    background: #f7f3ee;
   }
 }
 
 .today-btn {
-  background: #3d3d3d;
+  background: #3e4246;
   color: white;
   border: none;
   border-radius: 10px;

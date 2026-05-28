@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f7f6f4;
+  background: #f7f3ee;
   border: 1px solid #e8e6e4;
   border-radius: 12px;
   padding: 12px 16px;
@@ -83,16 +83,16 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  background: #faf9f8;
+  background: #f7f3ee;
 
   &:hover {
-    border-color: #ff93dd;
-    background: #fff5fc;
+    border-color: #a8c4e8;
+    background: #eef4fb;
   }
 
   &.selected {
-    border-color: #ff00a2;
-    background: #fff0f9;
+    border-color: #7fa6d9;
+    background: #eef4fb;
   }
 }
 
@@ -139,12 +139,12 @@
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 
-  svg { color: #ff00a2; }
+  svg { color: #7fa6d9; }
 
   &:hover {
-    border-color: #ff93dd;
-    color: #ff00a2;
-    background: #fff5fc;
+    border-color: #a8c4e8;
+    color: #7fa6d9;
+    background: #eef4fb;
   }
 }
 
@@ -181,7 +181,7 @@
 }
 
 .save-btn {
-  background: #3d3d3d;
+  background: #3e4246;
   color: white;
   border: none;
   border-radius: 10px;

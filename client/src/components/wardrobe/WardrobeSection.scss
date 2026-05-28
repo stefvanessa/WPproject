@@ -17,7 +17,7 @@
   text-align: left;
 
   &:hover {
-    background: #f7f6f4;
+    background: #f7f3ee;
     border-color: #d8d6d3;
   }
 
@@ -34,7 +34,7 @@
 }
 
 .section-chevron {
-  color: #ff00a2;
+  color: #7fa6d9;
   flex-shrink: 0;
   transition: transform 0.22s ease;
 
@@ -46,7 +46,7 @@
 .section-title {
   font-size: 15px;
   font-weight: 700;
-  color: #2e2e2e;
+  color: #3e4246;
   letter-spacing: 0.01em;
   flex: 1;
 }
@@ -54,9 +54,9 @@
 .section-count {
   font-size: 12px;
   font-weight: 600;
-  color: #ff00a2;
-  background: #fff0f9;
-  border: 1px solid #ffc8ed;
+  color: #7fa6d9;
+  background: #eef4fb;
+  border: 1px solid #b8d0ee;
   border-radius: 20px;
   padding: 2px 10px;
   line-height: 1.6;

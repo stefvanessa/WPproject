@@ -8,10 +8,10 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  background: #faf9f8;
+  background: #f7f3ee;
 
   &:hover:not(.empty) {
-    background: #f5ecf8;
+    background: #eef4fb;
     transform: translateY(-1px);
   }
 
@@ -21,7 +21,7 @@
   }
 
   &.today .day-number {
-    background: #ff00a2;
+    background: #7fa6d9;
     color: white;
     border-radius: 50%;
   }
@@ -31,8 +31,8 @@
   }
 
   &.has-outfit {
-    background: #fff0f9;
-    border: 1px solid #ffd6f0;
+    background: #eef4fb;
+    border: 1px solid #daeaf7;
   }
 }
 
@@ -78,7 +78,7 @@
 .day-number {
   font-size: 13px;
   font-weight: 500;
-  color: #2e2e2e;
+  color: #3e4246;
   width: 24px;
   height: 24px;
   display: flex;
@@ -99,7 +99,7 @@
 
 .day-outfit-name {
   font-size: 10px;
-  color: #ff00a2;
+  color: #7fa6d9;
   font-weight: 500;
   text-align: center;
   overflow: hidden;
