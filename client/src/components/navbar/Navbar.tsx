@@ -9,6 +9,13 @@ interface NavbarProps {
   activeTab: "generate" | "wardrobe" | "collections" | "calendar";
 }
 
+const TABS = [
+  { key: "generate",    label: "Generate"    },
+  { key: "wardrobe",    label: "Wardrobe"    },
+  { key: "collections", label: "Collections" },
+  { key: "calendar",    label: "Calendar"    },
+] as const;
+
 const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
   const [scrolled, setScrolled] = useState(false);
   const [pairOpen, setPairOpen] = useState(false);
@@ -16,43 +23,33 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
   const { user, logout } = useAuth();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className={`navbar ${scrolled ? "scrolled" : ""}`}>
-      <div className="brand__name">SnapFit</div>
-      <div className="tabs">
-        <div
-          className={`tab ${activeTab === "generate" ? "active" : ""}`}
-          onClick={() => navigate("/generate")}
-        >
-          Generate outfit
-        </div>
-        <div
-          className={`tab ${activeTab === "wardrobe" ? "active" : ""}`}
-          onClick={() => navigate("/wardrobe")}
-        >
-          My wardrobe
-        </div>
-        <div
-          className={`tab ${activeTab === "collections" ? "active" : ""}`}
-          onClick={() => navigate("/collections")}
-        >
-          Collections
-        </div>
-        <div
-          className={`tab ${activeTab === "calendar" ? "active" : ""}`}
-          onClick={() => navigate("/calendar")}
-        >
-          Calendar
-        </div>
+    <nav className={`navbar${scrolled ? " scrolled" : ""}`}>
+      {/* Logo */}
+      <div className="brand" onClick={() => navigate("/wardrobe")}>
+        <img src="/logo.png" alt="Fitly" className="brand-logo" />
       </div>
-      {/* Right-side actions */}
+
+      {/* Nav tabs */}
+      <div className="tabs">
+        {TABS.map(({ key, label }) => (
+          <button
+            key={key}
+            className={`tab${activeTab === key ? " active" : ""}`}
+            onClick={() => navigate(`/${key}`)}
+          >
+            {label}
+            {activeTab === key && <span className="tab-indicator" />}
+          </button>
+        ))}
+      </div>
+
+      {/* Right actions */}
       <div className="nav-actions">
         {user && (
           <>
@@ -61,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
               onClick={() => setPairOpen(true)}
               title="Connect mobile app"
             >
-              <FiSmartphone />
+              <FiSmartphone size={17} />
             </button>
             <button
               className="logout-btn"
@@ -70,15 +67,15 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {
               }}
               title="Log out"
             >
-              <FiLogOut />
-              <span className="logout-text">Log out</span>
+              <FiLogOut size={15} />
+              <span>Log out</span>
             </button>
           </>
         )}
       </div>
 
       <PairModal open={pairOpen} onClose={() => setPairOpen(false)} />
-    </div>
+    </nav>
   );
 };
 
