@@ -48,7 +48,7 @@ const MyWardrobePage = () => {
       if (advancedFilters.fit && p.fit !== advancedFilters.fit) return;
       if (advancedFilters.style && !(p.style ?? []).includes(advancedFilters.style)) return;
       if (lcQuery) {
-        const haystack = `${p.name} ${p.category} ${p.type}`.toLowerCase();
+        const haystack = p.name.toLowerCase();
         if (!haystack.includes(lcQuery)) return;
       }
       const arr = map.get(p.category) ?? [];
