@@ -15,15 +15,30 @@
 
 .header {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
 
   h2 {
     font-size: 24px;
     color: #333;
   }
+}
 
+.create-outfit-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  background: #3d3d3d;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
 
+  &:hover { background: #555; }
 }
 
 .error-text {

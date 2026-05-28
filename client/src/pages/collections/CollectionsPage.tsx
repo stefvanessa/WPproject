@@ -1,13 +1,16 @@
 import "./CollectionsPage.scss";
 import Navbar from "../../components/navbar/Navbar";
 import OutfitCard from "../../components/outfit/OutfitCard";
+import CreateOutfitModal from "../../components/outfit/CreateOutfitModal";
 import { useEffect, useState } from "react";
 import { fetchOutfits } from "../../api/outfits";
+import { FiPlus } from "react-icons/fi";
 
 export default function CollectionsPage() {
   const [outfits, setOutfits] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -33,6 +36,10 @@ export default function CollectionsPage() {
       <div className="collections-container">
         <div className="header">
           <h2>My Collections</h2>
+          <button className="create-outfit-btn" onClick={() => setCreateOpen(true)}>
+            <FiPlus size={16} />
+            Create Outfit
+          </button>
         </div>
 
         {loading && <div>Loading...</div>}
@@ -49,7 +56,12 @@ export default function CollectionsPage() {
 
                 <div className="outfits-grid">
                   {outfits.map((o) => (
-                    <OutfitCard key={o._id} outfit={o} onDeleted={(id:string) => setOutfits((prev)=>prev.filter(x=>x._id!==id))} />
+                    <OutfitCard
+                      key={o._id}
+                      outfit={o}
+                      onDeleted={(id) => setOutfits((prev) => prev.filter((x) => x._id !== id))}
+                      onUpdated={(updated) => setOutfits((prev) => prev.map((x) => x._id === updated._id ? updated : x))}
+                    />
                   ))}
                 </div>
               </div>
@@ -59,6 +71,12 @@ export default function CollectionsPage() {
           </>
         )}
       </div>
+
+      <CreateOutfitModal
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onCreated={(outfit) => setOutfits((prev) => [outfit, ...prev])}
+      />
     </div>
   );
 }

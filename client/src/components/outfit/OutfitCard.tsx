@@ -3,13 +3,21 @@ import type { Product } from '../../api/products';
 import { useEffect, useState } from 'react';
 import { apiFetch } from '../../api/client';
 import { deleteOutfit as apiDeleteOutfit } from '../../api/outfits';
+import CreateOutfitModal from './CreateOutfitModal';
 
 interface Props {
   outfit: any; // populated outfit with product refs or plain objects with imageKey
   onDeleted?: (id: string) => void;
+  onUpdated?: (outfit: any) => void;
 }
 
-export default function OutfitCard({ outfit, onDeleted }: Props) {
+export default function OutfitCard({ outfit: initialOutfit, onDeleted, onUpdated }: Props) {
+  const [outfit, setOutfit] = useState(initialOutfit);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => { setOutfit(initialOutfit); }, [initialOutfit]);
+
   const items: (Product | null)[] = [
     outfit.top ?? null,
     outfit.bottom ?? null,
@@ -19,7 +27,6 @@ export default function OutfitCard({ outfit, onDeleted }: Props) {
   ];
 
   const [urls, setUrls] = useState<(string | null)[]>([null, null, null, null, null]);
-  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -83,10 +90,14 @@ export default function OutfitCard({ outfit, onDeleted }: Props) {
   };
 
   return (
+    <>
     <div className="outfit-card">
-      <button className="delete-btn" onClick={handleDelete} disabled={deleting}>
-        {deleting ? 'Deleting...' : 'Delete'}
-      </button>
+      <div className="card-actions">
+        <button className="edit-btn" onClick={() => setEditOpen(true)}>Edit</button>
+        <button className="delete-btn" onClick={handleDelete} disabled={deleting}>
+          {deleting ? 'Deleting...' : 'Delete'}
+        </button>
+      </div>
 
       <div className="main-preview">
         {isTwoPiece ? (
@@ -118,5 +129,17 @@ export default function OutfitCard({ outfit, onDeleted }: Props) {
         <p className="meta-sub">{outfit.createdAt ? new Date(outfit.createdAt).toLocaleString() : ''}</p>
       </div>
     </div>
+
+    <CreateOutfitModal
+      open={editOpen}
+      onClose={() => setEditOpen(false)}
+      outfit={outfit}
+      onCreated={(updated) => {
+        setOutfit(updated);
+        onUpdated?.(updated);
+        setEditOpen(false);
+      }}
+    />
+    </>
   );
 }

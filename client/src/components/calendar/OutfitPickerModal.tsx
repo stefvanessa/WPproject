@@ -3,9 +3,10 @@ import './OutfitPickerModal.scss';
 import Modal from '../modal/Modal';
 import MiniOutfitPreview from './MiniOutfitPreview';
 import WeatherIcon from './WeatherIcon';
+import CreateOutfitModal from '../outfit/CreateOutfitModal';
 import type { CalendarEntry } from '../../api/calendar';
 import { getWeatherDescription, type WeatherDay } from '../../api/weather';
-import { FiDroplet, FiThermometer } from 'react-icons/fi';
+import { FiDroplet, FiPlus, FiThermometer } from 'react-icons/fi';
 
 interface Props {
   open: boolean;
@@ -16,6 +17,7 @@ interface Props {
   outfits: any[];
   onSave: (outfitId: string) => Promise<void>;
   onRemove: () => Promise<void>;
+  onOutfitCreated?: (outfit: any) => void;
 }
 
 function formatDate(dateStr: string): string {
@@ -37,10 +39,12 @@ export default function OutfitPickerModal({
   outfits,
   onSave,
   onRemove,
+  onOutfitCreated,
 }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
 
   useEffect(() => {
     setSelected(currentEntry?.outfit?._id ?? null);
@@ -111,11 +115,17 @@ export default function OutfitPickerModal({
         )}
 
         <div className="picker-actions">
-          {currentEntry?.outfit && (
-            <button className="remove-btn" onClick={handleRemove} disabled={removing}>
-              {removing ? 'Removing…' : 'Remove outfit'}
+          <div className="picker-action-left">
+            {currentEntry?.outfit && (
+              <button className="remove-btn" onClick={handleRemove} disabled={removing}>
+                {removing ? 'Removing…' : 'Remove outfit'}
+              </button>
+            )}
+            <button className="create-btn" onClick={() => setCreateOpen(true)}>
+              <FiPlus size={14} />
+              Create Outfit
             </button>
-          )}
+          </div>
           <div className="picker-action-right">
             <button className="cancel-btn" onClick={onClose}>
               Cancel
@@ -130,6 +140,16 @@ export default function OutfitPickerModal({
           </div>
         </div>
       </div>
+
+      <CreateOutfitModal
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onCreated={(outfit) => {
+          onOutfitCreated?.(outfit);
+          setSelected(outfit._id);
+          setCreateOpen(false);
+        }}
+      />
     </Modal>
   );
 }

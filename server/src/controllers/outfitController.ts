@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { Outfit } from '../models/Outfit';
 import { Product } from '../models/Product';
-import { s3 } from '../config/minIO';
+import { s3, s3Public } from '../config/minIO';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { buildOutfitSuggestions } from '../services/outfitRecommendationService';
@@ -17,7 +17,7 @@ const addSignedProductImages = async (obj: Record<string, any>) => {
 
       try {
         const cmd = new GetObjectCommand({ Bucket: process.env.MINIO_BUCKET, Key: plainProduct.imageKey });
-        plainProduct.imageUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+        plainProduct.imageUrl = await getSignedUrl(s3Public, cmd, { expiresIn: 3600 });
       } catch (err) {
         console.error('Failed to generate signed url for outfit product', err);
       }
@@ -45,7 +45,15 @@ export const createOutfit = async (req: Request, res: Response) => {
       shoes: body.shoes || undefined,
     });
 
-    res.status(201).json(outfit);
+    const populated = await Outfit.findById(outfit._id).populate([
+      { path: 'top' }, { path: 'bottom' }, { path: 'dress' },
+      { path: 'outerwear' }, { path: 'shoes' },
+    ]);
+
+    const obj: any = populated!.toObject();
+    const enriched = await addSignedProductImages(obj);
+
+    res.status(201).json(enriched);
   } catch (err) {
     console.error('Error creating outfit', err);
     res.status(500).json({ message: 'Error creating outfit' });
@@ -110,6 +118,38 @@ export const suggestOutfits = async (req: Request, res: Response) => {
   } catch (err) {
     console.error('Error suggesting outfits', err);
     res.status(500).json({ message: 'Error suggesting outfits' });
+  }
+};
+
+export const updateOutfit = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) return res.status(401).json({ message: 'Not authenticated' });
+
+    const outfit = await Outfit.findById(req.params.id);
+    if (!outfit) return res.status(404).json({ message: 'Not found' });
+    if (outfit.user.toString() !== (req.user as any)._id.toString())
+      return res.status(403).json({ message: 'Not allowed' });
+
+    const body = req.body as Record<string, any>;
+    outfit.name      = body.name      ?? outfit.name;
+    outfit.top       = body.top       || undefined;
+    outfit.bottom    = body.bottom    || undefined;
+    outfit.dress     = body.dress     || undefined;
+    outfit.outerwear = body.outerwear || undefined;
+    outfit.shoes     = body.shoes     || undefined;
+    await outfit.save();
+
+    const populated = await Outfit.findById(outfit._id).populate([
+      { path: 'top' }, { path: 'bottom' }, { path: 'dress' },
+      { path: 'outerwear' }, { path: 'shoes' },
+    ]);
+
+    const obj: any = populated!.toObject();
+    const enriched = await addSignedProductImages(obj);
+    res.json(enriched);
+  } catch (err) {
+    console.error('Error updating outfit', err);
+    res.status(500).json({ message: 'Error updating outfit' });
   }
 };
 

@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { CalendarEntry } from '../models/CalendarEntry';
-import { s3 } from '../config/minIO';
+import { s3, s3Public } from '../config/minIO';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
@@ -16,7 +16,7 @@ async function signProductUrls(outfit: any) {
             Bucket: process.env.MINIO_BUCKET!,
             Key: outfit[field].imageKey,
           });
-          outfit[field].imageUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+          outfit[field].imageUrl = await getSignedUrl(s3Public, cmd, { expiresIn: 3600 });
         } catch {
           // leave imageUrl undefined on failure
         }

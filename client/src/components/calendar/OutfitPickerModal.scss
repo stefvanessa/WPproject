@@ -109,14 +109,43 @@
 .picker-actions {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding-top: 12px;
   border-top: 1px solid #eae8e7;
+}
+
+.picker-action-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .picker-action-right {
   display: flex;
   gap: 10px;
-  margin-left: auto;
+}
+
+.create-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1.5px solid #e0dfdd;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+
+  svg { color: #ff00a2; }
+
+  &:hover {
+    border-color: #ff93dd;
+    color: #ff00a2;
+    background: #fff5fc;
+  }
 }
 
 .remove-btn {

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { Product } from "../models/Product";
-import { s3 } from "../config/minIO";
+import { s3, s3Public } from "../config/minIO";
 import {
   GetObjectCommand,
   DeleteObjectCommand,
@@ -105,7 +105,7 @@ export const createProduct = async (req: Request, res: Response) => {
       Bucket: process.env.MINIO_BUCKET,
       Key: product.imageKey,
     });
-    const imageUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+    const imageUrl = await getSignedUrl(s3Public, cmd, { expiresIn: 3600 });
 
     res.status(201).json({
       ...product.toObject(),
@@ -147,7 +147,7 @@ export const getProducts = async (req: Request, res: Response) => {
           Key: p.imageKey
         });
 
-        const signedUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+        const signedUrl = await getSignedUrl(s3Public, cmd, { expiresIn: 3600 });
 
         return {
           ...p.toObject(),
@@ -179,7 +179,7 @@ export const getProductById = async (req: Request, res: Response) => {
       Key: product.imageKey
     });
 
-    const signedUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+    const signedUrl = await getSignedUrl(s3Public, cmd, { expiresIn: 3600 });
 
     res.json({
       ...product.toObject(),
@@ -210,7 +210,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       Bucket: process.env.MINIO_BUCKET,
       Key: product.imageKey
     });
-    const signedUrl = await getSignedUrl(s3, cmd, { expiresIn: 3600 });
+    const signedUrl = await getSignedUrl(s3Public, cmd, { expiresIn: 3600 });
 
     res.json({
       ...product.toObject(),

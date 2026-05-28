@@ -50,6 +50,13 @@ export async function generateOutfitSuggestion(payload: OutfitSuggestionPayload 
   });
 }
 
+export async function updateOutfit(id: string, payload: OutfitPayload) {
+  return apiFetch(`/api/outfits/${id}`, {
+    method: 'PUT',
+    body: payload as unknown as BodyInit,
+  });
+}
+
 export async function deleteOutfit(id: string) {
   return apiFetch(`/api/outfits/${id}`, { method: 'DELETE', expectJson: false });
 }

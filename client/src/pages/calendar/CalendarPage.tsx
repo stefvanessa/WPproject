@@ -266,6 +266,7 @@ export default function CalendarPage() {
         outfits={outfits}
         onSave={handleSave}
         onRemove={handleRemove}
+        onOutfitCreated={(outfit) => setOutfits((prev) => [outfit, ...prev])}
       />
     </div>
   );
