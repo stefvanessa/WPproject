@@ -4,6 +4,51 @@
   gap: 20px;
 }
 
+.picker-weather {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f7f6f4;
+  border: 1px solid #e8e6e4;
+  border-radius: 12px;
+  padding: 12px 16px;
+  gap: 12px;
+}
+
+.pw-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pw-desc {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.pw-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pw-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #666;
+
+  svg { color: #aaa; }
+}
+
+.pw-divider {
+  width: 1px;
+  height: 14px;
+  background: #dddbd9;
+}
+
 .picker-empty {
   color: #555;
   font-size: 14px;

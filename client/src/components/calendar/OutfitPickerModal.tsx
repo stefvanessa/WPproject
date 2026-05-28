@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import './OutfitPickerModal.scss';
 import Modal from '../modal/Modal';
 import MiniOutfitPreview from './MiniOutfitPreview';
+import WeatherIcon from './WeatherIcon';
 import type { CalendarEntry } from '../../api/calendar';
+import { getWeatherDescription, type WeatherDay } from '../../api/weather';
+import { FiDroplet, FiThermometer } from 'react-icons/fi';
 
 interface Props {
   open: boolean;
   onClose: () => void;
   date: string | null;
+  weather?: WeatherDay;
   currentEntry?: CalendarEntry;
   outfits: any[];
   onSave: (outfitId: string) => Promise<void>;
@@ -28,6 +32,7 @@ export default function OutfitPickerModal({
   open,
   onClose,
   date,
+  weather,
   currentEntry,
   outfits,
   onSave,
@@ -65,6 +70,27 @@ export default function OutfitPickerModal({
   return (
     <Modal open={open} onClose={onClose} title={title}>
       <div className="picker-content">
+
+        {weather && (
+          <div className="picker-weather">
+            <div className="pw-main">
+              <WeatherIcon code={weather.weatherCode} size={28} />
+              <span className="pw-desc">{getWeatherDescription(weather.weatherCode)}</span>
+            </div>
+            <div className="pw-stats">
+              <span className="pw-stat">
+                <FiThermometer size={13} />
+                {weather.maxTemp}° / {weather.minTemp}°
+              </span>
+              <span className="pw-divider" />
+              <span className="pw-stat">
+                <FiDroplet size={13} />
+                {weather.precipitationProbability}%
+              </span>
+            </div>
+          </div>
+        )}
+
         {outfits.length === 0 ? (
           <p className="picker-empty">
             No saved outfits yet. Head to Generate to create some!

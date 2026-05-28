@@ -67,6 +67,30 @@ export async function fetchWeather(
   return result;
 }
 
+export async function geocodeCity(
+  name: string
+): Promise<{ lat: number; lon: number; label: string }> {
+  const results = await searchLocations(name, 1);
+  if (!results.length) throw new Error('City not found');
+  return results[0];
+}
+
+export async function searchLocations(
+  name: string,
+  count = 5
+): Promise<{ lat: number; lon: number; label: string }[]> {
+  const params = new URLSearchParams({ name, count: String(count), language: 'en', format: 'json' });
+  const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?${params}`);
+  if (!res.ok) throw new Error('Geocoding failed');
+  const data = await res.json();
+  if (!data.results?.length) return [];
+  return data.results.map((r: any) => ({
+    lat: r.latitude,
+    lon: r.longitude,
+    label: [r.name, r.admin1, r.country].filter(Boolean).join(', '),
+  }));
+}
+
 export function getUserLocation(): Promise<{ lat: number; lon: number }> {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
