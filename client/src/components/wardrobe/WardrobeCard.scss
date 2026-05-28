@@ -70,6 +70,21 @@
   }
 }
 
+.delete-action {
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 1.5px solid #e8c0be;
+  background: #fff4f4;
+  color: #b3261e;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover:not(:disabled) { background: #fde8e8; border-color: #d49a98; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
 .confirm-delete {
   background: #fff4f4;
   border: 1px solid #f3c0c0;
@@ -96,5 +111,10 @@
     border-radius: 8px;
     padding: 10px 14px;
     cursor: pointer;
+  }
+
+  .cancel {
+    background: #ecebea;
+    color: #444;
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Modal.scss";
 
 interface ModalProps {
@@ -9,6 +9,13 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ title, open, onClose, children }) => {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = ""; };
+    }
+  }, [open]);
+
   if (!open) return null;
 
   return (
