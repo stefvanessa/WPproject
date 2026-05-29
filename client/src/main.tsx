@@ -7,6 +7,7 @@ import GenerateOutfitPage from "./pages/generate-outfit/GenerateOutfitPage";
 import CollectionsPage from "./pages/collections/CollectionsPage";
 import MyWardrobePage from "./pages/my-wardrobe/MyWardrobePage";
 import CalendarPage from "./pages/calendar/CalendarPage";
+import OutfitInspoPage from "./pages/outfit-inspo/OutfitInspoPage";
 import { AuthProvider } from "./context/AuthContext";
 import RequireAuth from "./auth/RequireAuth";
 
@@ -33,6 +34,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             element={
               <RequireAuth>
                 <MyWardrobePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="inspo"
+            element={
+              <RequireAuth>
+                <OutfitInspoPage />
               </RequireAuth>
             }
           />

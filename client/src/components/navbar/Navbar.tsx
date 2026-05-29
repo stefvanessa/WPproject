@@ -6,7 +6,7 @@ import { FiLogOut, FiSmartphone } from "react-icons/fi";
 import PairModal from "../pair-modal/PairModal";
 
 interface NavbarProps {
-  activeTab: "generate" | "wardrobe" | "collections" | "calendar";
+  activeTab: "generate" | "wardrobe" | "collections" | "calendar" | "inspo";
 }
 
 const TABS = [
@@ -14,6 +14,7 @@ const TABS = [
   { key: "wardrobe",    label: "Wardrobe"    },
   { key: "collections", label: "Collections" },
   { key: "calendar",    label: "Calendar"    },
+  { key: "inspo",       label: "Outfit inspo" },
 ] as const;
 
 const Navbar: React.FC<NavbarProps> = ({ activeTab }) => {

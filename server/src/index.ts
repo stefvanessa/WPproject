@@ -14,6 +14,7 @@ import calendarRoutes from "./routes/calendarRoutes";
 import imageRoutes from "./routes/imageRoutes";
 import removeBgRoute from "./routes/removeBgRoute";
 import pairRoutes from "./routes/pairRoutes";
+import outfitInspoRoutes from "./routes/outfitInspoRoutes";
 import cors from "cors";
 
 const app = express();
@@ -57,6 +58,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/outfits", outfitRoutes);
 app.use("/api/calendar", calendarRoutes);
 app.use("/api/image", imageRoutes);
+app.use("/api/outfit-inspo", outfitInspoRoutes);
 app.use("/api/remove-bg", removeBgRoute);
 app.use("/api/pair", pairRoutes);
 
