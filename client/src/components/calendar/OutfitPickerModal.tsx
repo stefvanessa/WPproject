@@ -6,6 +6,7 @@ import WeatherIcon from './WeatherIcon';
 import CreateOutfitModal from '../outfit/CreateOutfitModal';
 import type { CalendarEntry } from '../../api/calendar';
 import { getWeatherDescription, type WeatherDay } from '../../api/weather';
+import type { Outfit } from '../../api/outfits';
 import { FiDroplet, FiPlus, FiThermometer } from 'react-icons/fi';
 
 interface Props {
@@ -14,10 +15,10 @@ interface Props {
   date: string | null;
   weather?: WeatherDay;
   currentEntry?: CalendarEntry;
-  outfits: any[];
+  outfits: Outfit[];
   onSave: (outfitId: string) => Promise<void>;
   onRemove: () => Promise<void>;
-  onOutfitCreated?: (outfit: any) => void;
+  onOutfitCreated?: (outfit: Outfit) => void;
 }
 
 function formatDate(dateStr: string): string {

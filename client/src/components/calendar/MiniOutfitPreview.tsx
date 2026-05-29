@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import './MiniOutfitPreview.scss';
 import { apiFetch } from '../../api/client';
+import type { Outfit } from '../../api/outfits';
+import type { Product } from '../../api/products';
 
 interface Props {
-  outfit: any;
+  outfit: Outfit;
   compact?: boolean;
   horizontal?: boolean;
 }
 
-async function resolveUrl(item: any): Promise<string | null> {
+async function resolveUrl(item: Product | undefined): Promise<string | null> {
   if (!item) return null;
   if (item.imageUrl) return item.imageUrl;
   if (item.imageKey) {

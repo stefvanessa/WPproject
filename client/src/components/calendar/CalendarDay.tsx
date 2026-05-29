@@ -4,11 +4,12 @@ import MiniOutfitPreview from './MiniOutfitPreview';
 import WeatherIcon from './WeatherIcon';
 import WeatherPopup from './WeatherPopup';
 import type { WeatherDay } from '../../api/weather';
+import type { CalendarEntry } from '../../api/calendar';
 
 interface Props {
   day: number | null;
   dateStr: string | null;
-  entry?: any;
+  entry?: CalendarEntry;
   weather?: WeatherDay;
   isToday: boolean;
   isPast: boolean;

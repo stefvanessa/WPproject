@@ -1,6 +1,16 @@
 import { apiFetch } from './client';
 import type { Product } from './products';
 
+export interface Outfit {
+  _id: string;
+  name?: string;
+  top?: Product;
+  bottom?: Product;
+  dress?: Product;
+  outerwear?: Product;
+  shoes?: Product;
+}
+
 export type OutfitPayload = {
   name?: string;
   top?: string;
@@ -28,15 +38,14 @@ export type OutfitSuggestionPayload = {
 };
 
 export async function saveOutfit(payload: OutfitPayload) {
-  return apiFetch('/api/outfits', {
+  return apiFetch<Outfit>('/api/outfits', {
     method: 'POST',
-    // apiFetch will set JSON headers and stringify non-FormData bodies
     body: payload as unknown as BodyInit,
   });
 }
 
 export async function fetchOutfits() {
-  return apiFetch<any[]>('/api/outfits');
+  return apiFetch<Outfit[]>('/api/outfits');
 }
 
 export async function generateOutfitSuggestion(payload: OutfitSuggestionPayload = {}) {
@@ -51,7 +60,7 @@ export async function generateOutfitSuggestion(payload: OutfitSuggestionPayload 
 }
 
 export async function updateOutfit(id: string, payload: OutfitPayload) {
-  return apiFetch(`/api/outfits/${id}`, {
+  return apiFetch<Outfit>(`/api/outfits/${id}`, {
     method: 'PUT',
     body: payload as unknown as BodyInit,
   });

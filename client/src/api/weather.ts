@@ -84,7 +84,7 @@ export async function searchLocations(
   if (!res.ok) throw new Error('Geocoding failed');
   const data = await res.json();
   if (!data.results?.length) return [];
-  return data.results.map((r: any) => ({
+  return (data.results as { latitude: number; longitude: number; name: string; admin1?: string; country?: string }[]).map((r) => ({
     lat: r.latitude,
     lon: r.longitude,
     label: [r.name, r.admin1, r.country].filter(Boolean).join(', '),

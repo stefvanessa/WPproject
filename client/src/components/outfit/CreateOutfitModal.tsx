@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import './CreateOutfitModal.scss';
 import Modal from '../modal/Modal';
 import { fetchProducts, type Product } from '../../api/products';
-import { saveOutfit, updateOutfit } from '../../api/outfits';
+import { saveOutfit, updateOutfit, type Outfit } from '../../api/outfits';
 import { FiPlus, FiX } from 'react-icons/fi';
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  onCreated: (outfit: any) => void;
-  outfit?: any; // pre-populated outfit for edit mode
+  onCreated: (outfit: Outfit) => void;
+  outfit?: Outfit;
 }
 
 const SLOTS = [
@@ -118,8 +118,8 @@ export default function CreateOutfitModal({ open, onClose, onCreated, outfit }: 
 
       onCreated(result);
       onClose();
-    } catch (err: any) {
-      setError(err.message ?? 'Failed to save outfit');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save outfit');
     } finally {
       setSaving(false);
     }

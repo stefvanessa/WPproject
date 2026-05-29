@@ -1,9 +1,10 @@
 import { apiFetch } from './client';
+import type { Outfit } from './outfits';
 
 export interface CalendarEntry {
   _id: string;
   date: string;
-  outfit?: any;
+  outfit?: Outfit;
 }
 
 export async function fetchMonthEntries(year: number, month: number): Promise<CalendarEntry[]> {
