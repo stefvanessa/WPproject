@@ -137,10 +137,10 @@ export default function WardrobeScreen({ navigation }: Props) {
   );
 }
 
-const PINK = "#ff00a2";
+const PINK = "#7fa6d9";
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fafafa" },
+  safe: { flex: 1, backgroundColor: "#f7f3ee" },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -148,15 +148,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#efefef",
-    backgroundColor: "#EAE9E9",
+    borderBottomColor: "#f0ecf7",
+    backgroundColor: "#e4e0da",
   },
   brand: { fontSize: 22, fontWeight: "700", color: PINK },
   headerRight: { flexDirection: "row", alignItems: "center", gap: 10 },
   userName: { fontSize: 14, color: "#555" },
   disconnectBtn: {
     borderWidth: 1,
-    borderColor: "#e0dfdd",
+    borderColor: "#dddbd8",
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -181,14 +181,14 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 130,
     borderRadius: 10,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f7f3ee",
   },
-  cardImagePlaceholder: { backgroundColor: "#efefef" },
+  cardImagePlaceholder: { backgroundColor: "#f0ecf7" },
   cardName: {
     marginTop: 8,
     fontSize: 13,
     fontWeight: "600",
-    color: "#1c1c1e",
+    color: "#3e4246",
     textAlign: "center",
   },
   cardType: { fontSize: 11, color: "#aaa", marginTop: 2 },

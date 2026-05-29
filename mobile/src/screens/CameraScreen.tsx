@@ -251,7 +251,7 @@ export default function CameraScreen({ navigation }: Props) {
   );
 }
 
-const PINK = "#ff00a2";
+const PINK = "#7fa6d9";
 
 const styles = StyleSheet.create({
   container:    { flex: 1, backgroundColor: "#000" },
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   tabTextActive: { color: "#fff" },
   centered: {
     flex: 1, alignItems: "center", justifyContent: "center",
-    padding: 32, backgroundColor: "#fafafa",
+    padding: 32, backgroundColor: "#f7f3ee",
   },
   permText:     { fontSize: 15, color: "#444", textAlign: "center", marginBottom: 20 },
   permBtn:      { backgroundColor: PINK, paddingHorizontal: 28, paddingVertical: 12, borderRadius: 12 },

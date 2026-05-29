@@ -167,7 +167,7 @@ export default function TryOnScreen({ route, navigation }: Props) {
   );
 }
 
-const PINK = "#ff00a2";
+const PINK = "#7fa6d9";
 
 const styles = StyleSheet.create({
   container: { flex: 1 },

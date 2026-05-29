@@ -128,10 +128,10 @@ export default function ConnectScreen() {
   );
 }
 
-const PINK = "#ff00a2";
+const PINK = "#7fa6d9";
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fafafa" },
+  safe: { flex: 1, backgroundColor: "#f7f3ee" },
   container: {
     flex: 1,
     alignItems: "center",
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "600",
-    color: "#1c1c1e",
+    color: "#3e4246",
     textAlign: "center",
   },
   subtitle: {
@@ -163,11 +163,11 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: "#e2e0de",
+    borderColor: "#dddbd8",
     backgroundColor: "#fff",
     fontSize: 28,
     fontWeight: "700",
-    color: "#1c1c1e",
+    color: "#3e4246",
     letterSpacing: 8,
     paddingHorizontal: 16,
   },
@@ -180,8 +180,8 @@ const styles = StyleSheet.create({
   },
   btnPrimary: { backgroundColor: PINK },
   btnPrimaryText: { color: "#fff", fontSize: 16, fontWeight: "600" },
-  btnOutline: { borderWidth: 1.5, borderColor: "#e2e0de", backgroundColor: "#fff" },
-  btnOutlineText: { color: "#1c1c1e", fontSize: 16, fontWeight: "500" },
+  btnOutline: { borderWidth: 1.5, borderColor: "#dddbd8", backgroundColor: "#fff" },
+  btnOutlineText: { color: "#3e4246", fontSize: 16, fontWeight: "500" },
   btnDisabled: { opacity: 0.6 },
   divider: {
     flexDirection: "row",
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 12,
   },
-  dividerLine: { flex: 1, height: 1, backgroundColor: "#e2e0de" },
+  dividerLine: { flex: 1, height: 1, backgroundColor: "#dddbd8" },
   dividerText: { color: "#aaa", fontSize: 13 },
   // Scanner
   scannerContainer: { flex: 1, backgroundColor: "#000" },

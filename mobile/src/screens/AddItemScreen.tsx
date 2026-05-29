@@ -255,10 +255,10 @@ export default function AddItemScreen({ route, navigation }: Props) {
   );
 }
 
-const PINK = "#ff00a2";
+const PINK = "#7fa6d9";
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fafafa" },
+  safe: { flex: 1, backgroundColor: "#f7f3ee" },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -266,11 +266,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#efefef",
-    backgroundColor: "#EAE9E9",
+    borderBottomColor: "#f0ecf7",
+    backgroundColor: "#e4e0da",
   },
   backBtn: { fontSize: 17, color: PINK, fontWeight: "500" },
-  headerTitle: { fontSize: 16, fontWeight: "600", color: "#1c1c1e" },
+  headerTitle: { fontSize: 16, fontWeight: "600", color: "#3e4246" },
   saveBtn: { fontSize: 17, color: PINK, fontWeight: "600" },
   scroll: { paddingBottom: 40 },
   photo: { width: "100%", height: 280, backgroundColor: "#eee" },
@@ -286,16 +286,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: "#e2e0de",
+    borderColor: "#dddbd8",
     padding: 13,
     fontSize: 15,
-    color: "#1c1c1e",
+    color: "#3e4246",
   },
   selectField: {
     backgroundColor: "#fff",
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: "#e2e0de",
+    borderColor: "#dddbd8",
     padding: 13,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   },
   selectFieldDisabled: { opacity: 0.45 },
   selectLabel: { fontSize: 13, color: "#888", fontWeight: "500" },
-  selectValue: { fontSize: 14, color: "#1c1c1e", fontWeight: "500" },
+  selectValue: { fontSize: 14, color: "#3e4246", fontWeight: "500" },
   selectPlaceholder: { color: "#bbb" },
   pills: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   pill: {
@@ -311,10 +311,10 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     borderRadius: 20,
     borderWidth: 1.5,
-    borderColor: "#e0dfdd",
+    borderColor: "#dddbd8",
     backgroundColor: "#fff",
   },
-  pillActive: { backgroundColor: "#fff0f9", borderColor: PINK },
+  pillActive: { backgroundColor: "#eef4fb", borderColor: PINK },
   pillText: { fontSize: 13, color: "#666", fontWeight: "500" },
   pillTextActive: { color: PINK },
 });
@@ -335,7 +335,7 @@ const sheet = StyleSheet.create({
     width: 36,
     height: 4,
     borderRadius: 2,
-    backgroundColor: "#d1cfcd",
+    backgroundColor: "#c8c5c0",
     alignSelf: "center",
     marginTop: 10,
     marginBottom: 6,
@@ -343,7 +343,7 @@ const sheet = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#1c1c1e",
+    color: "#3e4246",
     textAlign: "center",
     paddingVertical: 12,
     textTransform: "capitalize",
@@ -351,7 +351,7 @@ const sheet = StyleSheet.create({
   option: {
     paddingVertical: 14,
     borderTopWidth: 1,
-    borderTopColor: "#f0efee",
+    borderTopColor: "#f7f3ee",
   },
-  optionText: { fontSize: 15, color: "#1c1c1e" },
+  optionText: { fontSize: 15, color: "#3e4246" },
 });
