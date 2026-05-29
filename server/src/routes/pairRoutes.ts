@@ -47,7 +47,7 @@ router.post("/connect", async (req, res) => {
     await PairingCode.deleteOne({ _id: pairing._id });
 
     const token = jwt.sign(
-      { userId: user._id.toString() },
+      { userId: user.id },
       process.env.JWT_SECRET!,
       { expiresIn: "30d" }
     );
