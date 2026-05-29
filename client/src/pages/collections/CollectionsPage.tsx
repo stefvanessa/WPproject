@@ -3,11 +3,11 @@ import Navbar from "../../components/navbar/Navbar";
 import OutfitCard from "../../components/outfit/OutfitCard";
 import CreateOutfitModal from "../../components/outfit/CreateOutfitModal";
 import { useEffect, useMemo, useState } from "react";
-import { fetchOutfits } from "../../api/outfits";
+import { fetchOutfits, type Outfit } from "../../api/outfits";
 import { FiChevronDown, FiPlus, FiSearch } from "react-icons/fi";
 
 export default function CollectionsPage() {
-  const [outfits, setOutfits] = useState<any[]>([]);
+  const [outfits, setOutfits] = useState<Outfit[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
@@ -25,11 +25,11 @@ export default function CollectionsPage() {
     fetchOutfits()
       .then((data) => {
         if (!mounted) return;
-        setOutfits(data as any[]);
+        setOutfits(data);
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (!mounted) return;
-        setError(err.message ?? "Failed to load outfits");
+        setError(err instanceof Error ? err.message : "Failed to load outfits");
       })
       .finally(() => mounted && setLoading(false));
 

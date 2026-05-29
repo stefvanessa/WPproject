@@ -3,7 +3,7 @@ import Navbar from "../../components/navbar/Navbar";
 import ClothingCard from "../../components/clothing-card/ClothingCard";
 import { useEffect, useMemo, useState } from "react";
 import { fetchProducts, type Product } from "../../api/products";
-import { generateOutfitSuggestion, saveOutfit } from "../../api/outfits";
+import { generateOutfitSuggestion, saveOutfit, type OutfitPayload } from "../../api/outfits";
 
 type CategoryKey = "tops" | "bottoms" | "outerwear" | "dresses" | "footwear";
 type OutfitSlot = "top" | "bottom" | "dress" | "outerwear" | "shoes";
@@ -167,8 +167,8 @@ export default function GenerateOutfitPage() {
       setOuterwear(suggestion.outerwear ?? null);
       setShoes(suggestion.shoes ?? null);
       showSnackbar("Outfit generated");
-    } catch (err: any) {
-      showSnackbar(err.message ?? "Failed generating outfit");
+    } catch (err) {
+      showSnackbar(err instanceof Error ? err.message : "Failed generating outfit");
     } finally {
       setGenerating(false);
     }
@@ -176,7 +176,7 @@ export default function GenerateOutfitPage() {
 
   const saveCurrentOutfit = async () => {
     try {
-      const payload: any = { name: '' };
+      const payload: OutfitPayload = { name: '' };
 
       // Use UI mode to decide: if twoPiece UI is active, save top+bottom; if not, save dress
       if (twoPiece) {
@@ -204,7 +204,7 @@ export default function GenerateOutfitPage() {
       await saveOutfit(payload);
       setSnackbar('Outfit saved');
       setTimeout(() => setSnackbar(null), 2500);
-    } catch (err: any) {
+    } catch {
       setSnackbar('Failed saving outfit');
       setTimeout(() => setSnackbar(null), 2500);
     }

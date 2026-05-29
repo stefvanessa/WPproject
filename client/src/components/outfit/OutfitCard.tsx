@@ -2,13 +2,13 @@ import './OutfitCard.scss';
 import type { Product } from '../../api/products';
 import { useEffect, useState } from 'react';
 import { apiFetch } from '../../api/client';
-import { deleteOutfit as apiDeleteOutfit } from '../../api/outfits';
+import { deleteOutfit as apiDeleteOutfit, type Outfit } from '../../api/outfits';
 import CreateOutfitModal from './CreateOutfitModal';
 
 interface Props {
-  outfit: any; // populated outfit with product refs or plain objects with imageKey
+  outfit: Outfit;
   onDeleted?: (id: string) => void;
-  onUpdated?: (outfit: any) => void;
+  onUpdated?: (outfit: Outfit) => void;
 }
 
 export default function OutfitCard({ outfit: initialOutfit, onDeleted, onUpdated }: Props) {
@@ -46,7 +46,7 @@ export default function OutfitCard({ outfit: initialOutfit, onDeleted, onUpdated
             try {
               const data = await apiFetch<{ url: string }>(`/api/image/${encodeURIComponent(it.imageKey)}`);
               if (mounted) next[idx] = data.url;
-            } catch (err) {
+            } catch {
               // ignore
             }
           }

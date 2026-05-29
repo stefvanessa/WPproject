@@ -2,9 +2,16 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { apiFetch } from "../api/client";
 
+export interface AuthUser {
+  _id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
 interface AuthContextType {
-  user: any;
-  setUser: (user: any) => void;
+  user: AuthUser | null;
+  setUser: (user: AuthUser | null) => void;
   loading: boolean;
   logout: () => Promise<void>;
 }
@@ -16,13 +23,12 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [initialized, setInitialized] = useState(false);
 
-  // Load user on app start
   useEffect(() => {
-    apiFetch<{ user?: any; message?: string }>("/auth/success")
+    apiFetch<{ user?: AuthUser; message?: string }>("/auth/success")
       .then((data) => {
         if (data?.user) setUser(data.user);
       })
@@ -35,11 +41,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
   }, []);
 
-  // Logout function
   const logout = async () => {
     try {
       await apiFetch("/auth/logout", { expectJson: false, method: "GET" });
-    } catch (err) {
+    } catch {
       // ignore logout errors
     } finally {
       setUser(null);
@@ -53,6 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext)!;
 }

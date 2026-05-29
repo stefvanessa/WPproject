@@ -9,6 +9,7 @@ export interface Outfit {
   dress?: Product;
   outerwear?: Product;
   shoes?: Product;
+  createdAt?: string;
 }
 
 export type OutfitPayload = {

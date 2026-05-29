@@ -71,8 +71,8 @@ export default function WardrobeCard({ item, meta, onUpdated, onDeleted }: Wardr
       const updated = await updateProduct(item._id, { name, category, type, color, pattern, fit, style, temperature });
       onUpdated({ ...updated, imageUrl: updated.imageUrl ?? item.imageUrl });
       setOpen(false);
-    } catch (err: any) {
-      setError(err.message ?? "Failed to save changes");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to save changes");
     } finally {
       setSaving(false);
     }
@@ -228,8 +228,8 @@ export default function WardrobeCard({ item, meta, onUpdated, onDeleted }: Wardr
                       await deleteProduct(item._id);
                       onDeleted(item._id);
                       setOpen(false);
-                    } catch (err: any) {
-                      setError(err.message ?? "Failed to delete");
+                    } catch (err) {
+                      setError(err instanceof Error ? err.message : "Failed to delete");
                     } finally {
                       setSaving(false);
                       setConfirmingDelete(false);

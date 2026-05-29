@@ -2,6 +2,7 @@ import "./SearchFilterBar.scss";
 import { FiSearch, FiFilter } from "react-icons/fi";
 import { useState } from "react";
 import FilterModal, { type AdvancedFilters } from "./FilterModal";
+import type { ProductMeta } from "../../api/products";
 
 export interface WardrobeFilters {
   query: string;
@@ -10,7 +11,7 @@ export interface WardrobeFilters {
 interface Props {
   filters: WardrobeFilters;
   onChange: (next: WardrobeFilters) => void;
-  meta?: any;
+  meta?: ProductMeta;
   onAdvancedChange?: (next: AdvancedFilters) => void;
   advancedFilters?: AdvancedFilters;
 }

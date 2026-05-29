@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './CreateOutfitModal.scss';
 import Modal from '../modal/Modal';
 import { fetchProducts, type Product } from '../../api/products';
-import { saveOutfit, updateOutfit, type Outfit } from '../../api/outfits';
+import { saveOutfit, updateOutfit, type Outfit, type OutfitPayload } from '../../api/outfits';
 import { FiPlus, FiX } from 'react-icons/fi';
 
 interface Props {
@@ -113,8 +113,8 @@ export default function CreateOutfitModal({ open, onClose, onCreated, outfit }: 
       }
 
       const result = isEdit
-        ? await updateOutfit(outfit._id, payload as any)
-        : await saveOutfit(payload as any);
+        ? await updateOutfit(outfit._id, payload as OutfitPayload)
+        : await saveOutfit(payload as OutfitPayload);
 
       onCreated(result);
       onClose();

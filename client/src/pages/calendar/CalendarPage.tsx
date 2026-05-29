@@ -9,7 +9,7 @@ import {
   deleteCalendarEntry,
   type CalendarEntry,
 } from '../../api/calendar';
-import { fetchOutfits } from '../../api/outfits';
+import { fetchOutfits, type Outfit } from '../../api/outfits';
 import { fetchWeather, geocodeCity, searchLocations, getUserLocation, type WeatherDay } from '../../api/weather';
 import { FiChevronLeft, FiChevronRight, FiMapPin } from 'react-icons/fi';
 
@@ -22,7 +22,7 @@ export default function CalendarPage() {
     return new Date(now.getFullYear(), now.getMonth(), 1);
   });
   const [entries, setEntries] = useState<CalendarEntry[]>([]);
-  const [outfits, setOutfits] = useState<any[]>([]);
+  const [outfits, setOutfits] = useState<Outfit[]>([]);
   const [weatherMap, setWeatherMap] = useState<Record<string, WeatherDay>>({});
   const [location, setLocation] = useState<SavedLocation | null>(null);
   const [editingLocation, setEditingLocation] = useState(false);
@@ -50,7 +50,7 @@ export default function CalendarPage() {
         setLocation(loc);
         fetchWeather(loc.lat, loc.lon).then(setWeatherMap).catch(() => {});
         return;
-      } catch {}
+      } catch { /* invalid stored JSON, fall through to geolocation */ }
     }
 
     getUserLocation()
@@ -93,7 +93,7 @@ export default function CalendarPage() {
     try {
       const weather = await fetchWeather(loc.lat, loc.lon);
       setWeatherMap(weather);
-    } catch {}
+    } catch { /* weather fetch failed, keep existing map */ }
   }, []);
 
   const handleLocationInputChange = (value: string) => {

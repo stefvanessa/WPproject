@@ -118,8 +118,8 @@ export default function UploadModal({ open, onClose, onCreated, meta }: UploadMo
       onCreated(product);
       resetForm();
       onClose();
-    } catch (err: any) {
-      setError(err.message ?? "Upload failed");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setSubmitting(false);
     }

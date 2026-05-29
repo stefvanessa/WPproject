@@ -23,8 +23,8 @@ export default function PairModal({ open, onClose }: PairModalProps) {
       const data = await generatePairCode();
       setCode(data.code);
       setExpiresAt(new Date(data.expiresAt));
-    } catch (err: any) {
-      setError(err.message ?? "Failed to generate code");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate code");
     } finally {
       setLoading(false);
     }

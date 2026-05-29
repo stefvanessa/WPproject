@@ -24,8 +24,8 @@ export default function OutfitInspoPage() {
       setLoading(true);
       setError(null);
       setResult(await analyzeOutfitInspo(image));
-    } catch (err: any) {
-      setError(err.message ?? "Failed to analyze outfit inspo");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to analyze outfit inspo");
     } finally {
       setLoading(false);
     }
