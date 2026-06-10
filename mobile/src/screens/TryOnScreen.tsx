@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   View,
   Image,
@@ -12,8 +12,6 @@ import {
 import { CameraView } from "expo-camera";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../../App";
-import { useAuth } from "../context/AuthContext";
-import { API_URL } from "../config";
 
 type Props = NativeStackScreenProps<RootStackParamList, "TryOn">;
 
@@ -22,64 +20,12 @@ const ITEM_H = 300;
 
 export default function TryOnScreen({ route, navigation }: Props) {
   const { item } = route.params;
-  const { token } = useAuth();
-  const [displayUri, setDisplayUri] = useState<string | null>(null);
-  const [processing, setProcessing] = useState(true);
+  const [imageReady, setImageReady] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
 
   const prevTouch = useRef<{ x: number; y: number } | null>(null);
   const lastDist = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (!item.imageUrl) {
-      setProcessing(false);
-      return;
-    }
-
-    let cancelled = false;
-
-    (async () => {
-      try {
-        const imgResp = await fetch(item.imageUrl!);
-        const blob = await imgResp.blob();
-
-        const form = new FormData();
-        form.append("image", blob as any, "item.jpg");
-
-        const bgResp = await fetch(`${API_URL}/api/remove-bg`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-          body: form,
-        });
-
-        if (!bgResp.ok) {
-          const errText = await bgResp.text().catch(() => "");
-          console.warn(`[TryOn] remove-bg ${bgResp.status}:`, errText);
-          throw new Error(`remove-bg ${bgResp.status}`);
-        }
-
-        const pngBlob = await bgResp.blob();
-        console.log("[TryOn] got PNG blob, size:", pngBlob.size, "type:", pngBlob.type);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (!cancelled) {
-            setDisplayUri(reader.result as string);
-            setProcessing(false);
-          }
-        };
-        reader.readAsDataURL(pngBlob);
-      } catch (err) {
-        console.warn("[TryOn] remove-bg failed, using original:", err);
-        if (!cancelled) {
-          setDisplayUri(item.imageUrl ?? null);
-          setProcessing(false);
-        }
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [item.imageUrl, token]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -126,17 +72,15 @@ export default function TryOnScreen({ route, navigation }: Props) {
     <View style={styles.container} {...panResponder.panHandlers}>
       <CameraView style={StyleSheet.absoluteFill} facing="front" />
 
-      {processing ? (
-        <ActivityIndicator
-          style={styles.spinner}
-          size="large"
-          color={PINK}
-        />
-      ) : displayUri ? (
+      {!imageReady && (
+        <ActivityIndicator style={styles.spinner} size="large" color={PINK} />
+      )}
+      {item.imageUrl ? (
         <Image
-          source={{ uri: displayUri }}
+          source={{ uri: item.imageUrl }}
           style={[
             styles.item,
+            { opacity: imageReady ? 1 : 0 },
             {
               transform: [
                 { translateX: pos.x },
@@ -146,6 +90,7 @@ export default function TryOnScreen({ route, navigation }: Props) {
             },
           ]}
           resizeMode="contain"
+          onLoad={() => setImageReady(true)}
         />
       ) : null}
 

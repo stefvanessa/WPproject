@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { Product } from "../models/Product";
 import { s3, s3Public } from "../config/minIO";
+import sharp from "sharp";
 import {
   GetObjectCommand,
   DeleteObjectCommand,
@@ -54,14 +55,51 @@ export const createProduct = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const fileName = `${uuid()}-${req.file.originalname}`;
-    const uploadBody: Buffer = req.file.buffer;
-    const contentType = req.file.mimetype;
+    // Normalise to JPEG — handles AVIF, HEIC, WEBP, PNG, and anything sharp supports
+    let normalised: Buffer;
+    try {
+      normalised = await sharp(req.file.buffer).jpeg({ quality: 92 }).toBuffer();
+    } catch {
+      return res.status(400).json({ message: "Unsupported image format" });
+    }
+
+    // 1. Attempt background removal if API key is configured
+    let uploadBody: Buffer = normalised;
+    let contentType = "image/jpeg";
+    let ext = "jpg";
+
+    const removeBgKey = process.env.REMOVE_BG_API_KEY;
+    if (removeBgKey && removeBgKey !== "your_api_key_here") {
+      try {
+        const form = new FormData();
+        form.append("size", "regular");
+        form.append("image_file_b64", normalised.toString("base64"));
+
+        const resp = await fetch("https://api.remove.bg/v1.0/removebg", {
+          method: "POST",
+          headers: { "X-Api-Key": removeBgKey },
+          body: form,
+        });
+
+        if (resp.ok) {
+          uploadBody = Buffer.from(await resp.arrayBuffer());
+          contentType = "image/png";
+          ext = "png";
+        } else {
+          const errText = await resp.text().catch(() => "");
+          console.warn(`remove.bg ${resp.status}: ${errText} — using original image`);
+        }
+      } catch (bgErr) {
+        console.warn("remove.bg call failed — using original image:", bgErr);
+      }
+    }
+
+    const fileName = `${uuid()}.${ext}`;
 
     // Ensure bucket exists (for local MinIO)
     try {
       await s3.send(new HeadBucketCommand({ Bucket: process.env.MINIO_BUCKET }));
-    } catch (headErr) {
+    } catch {
       try {
         await s3.send(new CreateBucketCommand({ Bucket: process.env.MINIO_BUCKET }));
       } catch (createErr) {
@@ -73,7 +111,7 @@ export const createProduct = async (req: Request, res: Response) => {
       }
     }
 
-    // 2. Upload file (cleaned or original) to MinIO
+    // 2. Upload file (bg-removed or original) to MinIO
     try {
       await s3.send(
         new PutObjectCommand({

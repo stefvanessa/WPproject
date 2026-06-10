@@ -3,7 +3,6 @@ import Modal from "../modal/Modal";
 import { FiUpload, FiChevronDown, FiX } from "react-icons/fi";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createProduct, type Product, type ProductMeta } from "../../api/products";
-import { API_BASE_URL } from "../../api/client";
 
 interface UploadModalProps {
   open: boolean;
@@ -29,7 +28,6 @@ export default function UploadModal({ open, onClose, onCreated, meta }: UploadMo
   const [customStyleInput, setCustomStyleInput] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
-  const [removingBg, setRemovingBg] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -51,38 +49,14 @@ export default function UploadModal({ open, onClose, onCreated, meta }: UploadMo
     setName(""); setCategory(""); setType(""); setColor("");
     setPattern(""); setFit(""); setStyle([]); setTemperature([]);
     setCustomStyleInput(""); setSelectedFile(null);
-    setImagePreview(null); setError(null); setSubmitting(false); setRemovingBg(false);
+    setImagePreview(null); setError(null); setSubmitting(false);
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setSelectedFile(file);
     setImagePreview(URL.createObjectURL(file));
-    setRemovingBg(true);
-
-    try {
-      const fd = new FormData();
-      fd.append("image", file);
-      const res = await fetch(`${API_BASE_URL}/api/remove-bg`, {
-        method: "POST",
-        credentials: "include",
-        body: fd,
-      });
-      if (res.ok) {
-        const arrayBuffer = await res.arrayBuffer();
-        const contentType = res.headers.get("content-type") ?? "image/png";
-        const blob = new Blob([arrayBuffer], { type: contentType });
-        const cleanedFile = new File([blob], file.name.replace(/\.[^.]+$/, ".png"), { type: contentType });
-        setSelectedFile(cleanedFile);
-        setImagePreview(URL.createObjectURL(blob));
-      }
-    } catch {
-      // keep original on network error
-    } finally {
-      setRemovingBg(false);
-    }
   };
 
   const toggleTag = (value: string, list: string[], setter: (a: string[]) => void) => {
@@ -136,18 +110,14 @@ export default function UploadModal({ open, onClose, onCreated, meta }: UploadMo
             {imagePreview ? (
               <div className="image-preview-compact">
                 <img src={imagePreview} alt="Preview" />
-                {removingBg && (
-                  <div className="removing-bg-overlay">Removing bg…</div>
-                )}
-                {!removingBg && (
-                  <button
-                    className="change-photo-btn"
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    Change
-                  </button>
-                )}
+                <button
+                  className="change-photo-btn"
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={submitting}
+                >
+                  Change
+                </button>
               </div>
             ) : (
               <div
@@ -324,7 +294,7 @@ export default function UploadModal({ open, onClose, onCreated, meta }: UploadMo
           >
             Cancel
           </button>
-          <button className="save" onClick={handleSave} disabled={submitting || removingBg}>
+          <button className="save" onClick={handleSave} disabled={submitting}>
             {submitting ? "Saving…" : "Save Item"}
           </button>
         </div>
