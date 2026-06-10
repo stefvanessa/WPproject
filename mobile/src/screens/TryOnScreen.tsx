@@ -21,6 +21,7 @@ const ITEM_H = 300;
 export default function TryOnScreen({ route, navigation }: Props) {
   const { item } = route.params;
   const [imageReady, setImageReady] = useState(false);
+  const [facing, setFacing] = useState<"front" | "back">("back");
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
 
@@ -70,7 +71,7 @@ export default function TryOnScreen({ route, navigation }: Props) {
 
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
-      <CameraView style={StyleSheet.absoluteFill} facing="front" />
+      <CameraView style={StyleSheet.absoluteFill} facing={facing} />
 
       {!imageReady && (
         <ActivityIndicator style={styles.spinner} size="large" color={PINK} />
@@ -95,12 +96,20 @@ export default function TryOnScreen({ route, navigation }: Props) {
       ) : null}
 
       <SafeAreaView style={styles.hud} pointerEvents="box-none">
-        <TouchableOpacity
-          style={styles.closeBtn}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.closeTxt}>✕</Text>
-        </TouchableOpacity>
+        <View style={styles.topRow}>
+          <TouchableOpacity
+            style={styles.closeBtn}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.closeTxt}>✕</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.flipBtn}
+            onPress={() => setFacing((f) => (f === "front" ? "back" : "front"))}
+          >
+            <Text style={styles.flipTxt}>⇄</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.badge}>
           <Text style={styles.badgeName}>{item.name}</Text>
@@ -141,7 +150,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  topRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   closeTxt: { color: "#fff", fontSize: 18 },
+  flipBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "rgba(0,0,0,0.45)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  flipTxt: { color: "#fff", fontSize: 22 },
   badge: {
     alignSelf: "center",
     alignItems: "center",
